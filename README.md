@@ -56,8 +56,8 @@ avg-camelbert-reg-word,avg-marbert-ce-raw-tt,avg-arabertv2-ce-d3tok,xlmrL-reg-ra
 ```
 
 Four seats are public checkpoints, nine are seed-averaged families of our own fine-tunes,
-one is a single run. Four seats use variants retrained on train plus the released test
-split, which is legal in both tracks.
+one is a single run. Four seats use variants retrained on train plus the corpus's publicly
+released gold test split; the paper's appendix states this disclosure in full.
 
 ## Layout
 
@@ -88,10 +88,11 @@ rerun without retraining anything.
 
 **Predictions on the blind test set are not published.** The blind set is released only to
 registered participants, and it may be reused in a future edition of the shared task; a
-strong prediction file over it would be a pseudo-label source for later participants. The
-code regenerates those files from the blind input for anyone who holds it, and the sha256
-above lets the organisers verify the submitted file exactly. Internal campaign notes are
-also not included.
+strong prediction file over it would be a pseudo-label source for later participants.
+Member score arrays computed over the blind set are withheld for the same reason, which is
+why the rebuild command above needs them regenerated first. The code regenerates both from
+the blind input for anyone who holds it, and the sha256 above lets the organisers verify
+the submitted file exactly. Internal campaign notes are also not included.
 
 ## Citation
 
