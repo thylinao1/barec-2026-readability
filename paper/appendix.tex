@@ -1,0 +1,215 @@
+\section{Submission ledger}
+\label{app:ledger}
+
+Every row is a live board reading on the blind gold. Rows marked with a dagger were probes
+uploaded to the Open track and read but never added to a leaderboard, which the competition's
+\texttt{Add} submission rule makes free (Section~\ref{sec:setup}).
+
+\begin{table}[h]
+\centering\small
+\begin{tabular}{@{}llr@{}}
+\toprule
+system & calibration & QWK \\
+\midrule
+word-only 3-member & $f = 0$ & 84.1 \\
+\textbf{half-match champion} & $f = 0.50$ & \textbf{84.5} \\
+match-60 & $f = 0.60$ & 84.4 \\
+full distribution match & $f = 1.00$ & 84.0 \\
+metadata-reweighted prior$^\dagger$ & $f = 0.50$ & 83.9 \\
+\textbf{blend4reg} (both tracks) & $f = 0.50$ & \textbf{84.8} \\
+blend5, adds MARBERTv2$^\dagger$ & $f = 0.50$ & 84.7 \\
+blend4reg + doc shrinkage$^\dagger$ & $f = 0.50$ & 84.6 \\
+fleet11 & $f = 0.50$ & 85.1 \\
+fleet10strict & $f = 0.50$ & 85.2 \\
+fleet14 (both tracks) & $f = 0.50$ & 85.3 \\
+fleet14 tie probes, 4 files$^\dagger$ & $f = 0.50$ & 85.2 to 85.3 \\
+\textbf{fleet14tt4}, final, both & $f = 0.50$ & \textbf{85.4} \\
+\bottomrule
+\end{tabular}
+\caption{Blind-phase submissions, in the order they were measured.}
+\end{table}
+
+Two rows in our internal log recorded a track that we could not re-confirm after the phase
+closed, and one calibration reading at $f = 0.40$ came from an ambiguous screenshot. The
+authenticated submission history is not reachable through the public API, so rather than
+guess we dropped the $f = 0.40$ point and describe the calibration peak as flat between 0.5
+and 0.6 rather than across 0.4 to 0.6.
+
+\section{Negative results in full}
+\label{app:negative}
+
+\paragraph{Metadata-reweighted label prior, refuted at 83.9.} The half-match calibration
+matches the blind scores to the raw training label prior. That target is arguably wrong,
+because the blind set's composition differs sharply from train: the STEM domain rises from
+6.9\% to 17.8\% and the Specialized text class from 26.9\% to 44.7\%, while Advanced falls
+from 33.0\% to 19.3\%. Domain and text class are present for 100\% of blind rows and take
+values that exist in train, which permits a label-free reweighting
+$P(\ell) = \sum_s P(s \mid \text{blind}) \, P(\ell \mid s, \text{train})$ over
+$s = \text{Domain} \times \text{Text\_Class}$. This shifts the prior by $L_1$ distance
+0.1224 and alters 1{,}697 of 8{,}077 predictions, every one by exactly $+1$ level. We built
+it as a strictly single-variable change: the implementation's own raw-prior reference output
+is byte-identical to the previously submitted champion, so the prior is provably the only
+thing that differs. It scored 83.9, losing 0.6.
+
+The hypothesis could not be tested offline, because blind has no labels and the test split
+does not exhibit the shift that motivated the correction. What the refutation rules out is
+specific: pushing 21\% of predictions up one level makes things worse, so the blind set is
+not systematically harder in readability level than train despite being 2.6 times more STEM.
+We suspect this is because BAREC levels are annotated against a reading progression rather
+than topic difficulty, so domain composition and level composition are less coupled than
+intuition suggests, but we did not test that explanation.
+
+\paragraph{MARBERTv2 as a member, measured at $0.00$ and $-0.1$.} MARBERTv2 was the most
+attractive remaining candidate on paper: a different backbone family, and the least
+correlated with our blend at 0.945 against 0.96 to 0.98 for everything else. Offline it
+measured $+0.41$ on the clean test holdout and $+0.406$ on honest nested out-of-fold, the
+largest gain in either table. Recovering it was expensive, because the original fine-tuning
+script saved only prediction arrays and never called \texttt{save\_pretrained}, so the model
+existed only as numbers and had to be retrained. On the board it contributed $0.00$ when
+added to the champion and $-0.1$ in the five-member configuration.
+
+\paragraph{Document-level score shrinkage, measured at $-0.2$.} The blind set ships a
+document column with 212 documents over 8{,}077 sentences, which invites smoothing each
+sentence score toward its document mean,
+$s \leftarrow (1-\alpha) s + \alpha \, \mathrm{mean}_{\text{doc}}(s)$. On the clean test
+holdout the effect is single-peaked and sharp: 85.48 at $\alpha = 0$, 85.69 at $0.1$, 85.32
+at $0.2$, 84.88 at $0.3$, and a collapse to 82.15 at $0.5$. We shipped the peak and it cost
+0.2. One implementation subtlety has to be right for the transform to be the one that was
+measured: shrinkage must be applied to both validation and blind scores, because the
+rounder's cutpoints live in validation score space.
+
+\paragraph{Weak or redundant members.} AraELECTRA regression is the most decorrelated
+candidate we measured at 0.9101, but at 78.29 solo it is too weak to help and moves the
+blend from 85.07 to 84.87. A D3Tok cross-entropy member costs $-0.055$ on honest nested
+out-of-fold and was excluded even though its sibling regression member is our best single
+addition. Decorrelation alone does not qualify a member; our working rule is that a member
+must be either near 85 solo or below 0.90 correlated, and one that is neither is not worth
+a seat.
+
+\section{The saturation sweep}
+\label{app:saturation}
+
+All figures are honest validation nested out-of-fold QWK, mean over threshold grids of 200,
+300 and 400 candidates. The equal-weight fourteen-member baseline is 85.281 $\pm$ 0.051.
+
+\begin{table}[h]
+\centering\small
+\begin{tabular}{@{}lr@{}}
+\toprule
+aggregation & QWK \\
+\midrule
+\textbf{equal weight (shipped)} & \textbf{85.281} \\
+NNLS weights, ridge-shrunk 25/50/75 & 84.79 to 85.10 \\
+OLS and clipped weights & 84.79 to 85.10 \\
+direct-QWK coordinate ascent & 84.97, 84.98 \\
+expanded 44-member pool, NNLS & 84.94 to 85.10 \\
+per-member isotonic calibration & 84.74 to 85.12 \\
+median / trim1 / trim2 / rank-mean & 84.79 to 85.01 \\
+\bottomrule
+\end{tabular}
+\caption{Twenty aggregation configurations, all below plain equal weight. Per-fold fitted
+weights were unstable, zeroing members in some folds and not others.}
+\end{table}
+
+Member-level improvements were absorbed as well. We built a word-to-D3Tok lexicon from the
+gold corpus alignment (98.8\% of sentences align), covering 92\% of validation tokens and
+91\% of blind tokens, with the older disambiguation pipeline filling the remainder. This
+raised sentence-exact fidelity against the gold column from 63.7\% to 79.1\% and lifted the
+affected regression member from 82.27 to 83.18 solo on validation, recovering most of the
+gap to gold text. At blend level the same change was worth $-0.019$ when swapped for the
+single member, $+0.001$ for the seed-averaged family, and $-0.024$ for both together.
+Retraining the five strongest families on train plus the released test split, 62{,}131 rows
+and a 13\% increase in gold data, moved the blend from 85.281 to 85.289.
+
+\section{Fine-tuning grid}
+\label{app:fleet}
+
+\begin{table}[t]
+\centering\small
+\begin{tabular}{@{}llc@{}}
+\toprule
+origin & heads / inputs & seats \\
+\midrule
+public checkpoints & CE, reg; Word, D3Tok, raw & 4 \\
+own AraBERT v02/v2/large & CE, reg; Word, D3Tok & 5 \\
+own CAMeLBERT, QARiB & CE, reg; Word, raw & 3 \\
+own MARBERT, AraELECTRA, XLM-R & CE, reg; raw, Word & 3 \\
+\bottomrule
+\end{tabular}
+\caption{The fourteen seats, by origin. Nine are seed-averaged families of our own
+fine-tunes, four are public checkpoints, one is a single run; four use variants retrained on
+train plus the released test split, legal in both tracks. The exact member list is given
+below.}
+\label{tab:members}
+\end{table}
+
+
+Both tracks we entered are satisfied by BAREC data alone. We used no external readability resources: the SAMER corpus \citep{alhafni-etal-2024-samer} and the SAMER readability lexicon \citep{al-khalil-etal-2020-large}, which the Constrained track permits, were not used, and we added nothing outside BAREC in the Open track either, since the 2025 evidence is that external data does not help on this task.
+
+Training used a Slurm job array on A100 GPUs. One trainer script takes backbone, loss,
+input view, seed, learning rate and warmup ratio, and writes validation and test score
+arrays through the same code path used at inference. Defaults: learning rate $2\times
+10^{-5}$, 5 epochs, batch 16, maximum sequence length 128, no warmup except 0.06 for the
+large backbones. Cross-entropy, soft-label and focal heads are decoded to a continuous score
+by the posterior mean $\mathrm{softmax}(z) \cdot [1..19]$; regression heads use the raw
+output; CORN follows \citet{shi-etal-2023-corn}.
+
+The dispatched grid has 112 rows over 13 backbones and 6 loss families (cross-entropy 45,
+regression 44, soft-QWK 10, focal 6, CORN 5, soft-label 2), crossing three input views (raw,
+Word, D3Tok) with seeds. 113 runs completed with a done marker and both score arrays. With
+public checkpoints and seed-averaged families this produced a pool of 172 candidate members,
+26 of them seed averages.
+
+Two gates apply before a member may enter a blend, both added after an incident in which a
+checkpoint export was omitted and only prediction arrays survived. The head shape must match
+the fine-tune rather than the base model, and locally recomputed validation scores must
+reproduce the cluster's saved arrays above 0.99 correlation. A member failing either gate is
+not blended, because a standardisation computed from mismatched scores is silently wrong
+rather than loudly wrong.
+
+The fourteen seats of the final system are: the four public-checkpoint champion members
+(\texttt{arabertv02-word-CE}, \texttt{camelbert-word-CE},
+\texttt{qarib-barec-optimized-v8}, \texttt{arabertv2-d3tok-reg} scored through our own
+D3Tok pipeline); seed-averaged families of \texttt{arabertv2-reg-d3tok},
+\texttt{arabertv02-ce-word}, \texttt{alarge02-reg-word} and \texttt{marbert-ce-raw}, each
+retrained on train plus test; seed-averaged families of \texttt{camelbert-ce-word},
+\texttt{qarib-ce-raw}, \texttt{araelectra-reg-word}, \texttt{camelbert-reg-word} and
+\texttt{arabertv2-ce-d3tok}; and a single \texttt{xlm-roberta-large} regression run.
+
+\section{Harness detail}
+\label{app:harness}
+
+The rounder maps a continuous score to a level in $[1,19]$ via 18 monotone cutpoints chosen
+by coordinate ascent to maximise QWK. The search is seeded from equal-frequency quantiles of
+the label distribution, each cutpoint is swept over a fixed grid spanning the score range,
+monotonicity is enforced between neighbours, and the output is clipped. We use monotone
+coordinate ascent rather than Nelder-Mead, which can return crossed, non-monotone thresholds
+in 18 dimensions and is retained only as a cross-check. On a classical ridge baseline the
+protocol reads cleanly: naive rounding 71.25, nested out-of-fold 74.48, non-nested
+out-of-fold 74.63.
+
+Folds are built once with grouped stratified 5-fold cross-validation, grouped on document
+and stratified on the 19-level label, and serialised to a committed document-to-fold map
+covering 1{,}518 documents. The map is loaded identically on every machine and never
+regenerated, because regenerating it per machine is how out-of-fold arrays silently fail to
+line up. All five folds carry all 19 levels.
+
+The parity gate compares our scorer against the official development fixture at the level of
+the printed string: QWK 80.0040\%, accuracy 56.6211\%, adjacent accuracy 69.8632\%, average
+absolute distance 1.143776, and 65.8687\% / 70.2736\% / 76.4569\% at 7, 5 and 3 collapsed
+levels.
+
+\section{Reproducibility}
+\label{app:repro}
+
+Code, the fine-tuning grid, and the per-run validation and test score arrays are at
+\url{https://github.com/thylinao1/barec-2026-readability} under an MIT license. The final
+submission is reproduced from that repository byte for byte; its SHA-256 is
+\texttt{e243ab46a0edb09e} \texttt{1361e8bcb52159708e2f22bb4d90063c5206932db0bf2516}, and the
+exact command is in the repository README.
+
+Predictions over the blind test set are deliberately not published. The blind set is
+released only to registered participants and may be reused in a future edition, so a strong
+prediction file over it would function as a pseudo-label source for later participants. The
+code regenerates those files for anyone holding the blind input, and the hash above lets the
+organisers verify the submitted file exactly.

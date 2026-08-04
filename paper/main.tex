@@ -1,7 +1,8 @@
 % thylinao at BAREC Shared Task 2026
 % Title format is mandated by the organisers:
 %   <Team Name> at BAREC Shared Task 2026: <Your Contribution>
-% Body target: 4 pages including Limitations. References and Appendix are unlimited.
+% Body target: 4 pages (Introduction through Conclusion). Limitations,
+% Acknowledgements, References and Appendix are excluded from the ACL page limit.
 % House rule: no em dashes and no en dashes anywhere in the prose.
 \documentclass[11pt]{article}
 \usepackage[final]{acl}
@@ -15,6 +16,7 @@
 \usepackage{booktabs}
 \usepackage{amsmath}
 \usepackage{multirow}
+\usepackage{url}
 
 \title{thylinao at BAREC Shared Task 2026:\\Ensembling at the Noise Floor}
 
@@ -54,39 +56,30 @@ responded by rebuilding the campaign around the one instrument with adequate res
 first proving that the Open and Strict tracks score identical blind gold, then making every
 decision worth a submission from a live board reading. This paper describes the system that
 finished second on both tracks at 85.4 QWK, and the measurement discipline that chose it,
-which we believe is the part worth reusing.
+which we believe is the part worth reusing.\footnote{Code, the fine-tuning grid and the
+per-run score arrays: \url{https://github.com/thylinao1/barec-2026-readability}}
 
-The system is ordinary on purpose. It is an equal-weight average of z-standardised member
-scores with a single calibration scalar, and we report that plainness as a result rather
-than as a limitation: every fitted alternative we tried, including non-negative least
-squares weights, direct-QWK coordinate ascent, per-member isotonic calibration and four
-robust aggregators, scored below plain equal weight on our honest offline protocol
-(Section~\ref{sec:results}). At the resolution available to us, a more elaborate combiner
-could not be justified.
+The system is ordinary on purpose, and we report that plainness as a result rather than a
+limitation: every fitted alternative we tried, from non-negative least squares weights to
+per-member isotonic calibration and robust aggregators, scored below plain equal weight
+(Section~\ref{sec:results}). At our resolution, a more elaborate combiner could not be
+justified.
 
 The first application of the rule came early. The public CAMeL-Lab readability checkpoints
 were fine-tuned on the BAREC corpus, which contains the shared task's training split, so
-their training-split predictions are in-sample. Our harness surfaced this as solo QWK of 89
-to 95 on train against 82 to 84 on clean holdouts. Any blend weight, cutpoint or selection
-decision tuned on train would have been tuned on memorised labels, so we retired train as a
-tuning surface and adopted tune-on-validation, evaluate-once-on-test.
+their training-split predictions are in-sample: solo QWK of 89 to 95 on train against 82 to
+84 on clean holdouts. Any blend weight or cutpoint tuned on train would have been tuned on
+memorised labels, so we retired train as a tuning surface and adopted
+tune-on-validation, evaluate-once-on-test.
 
-Our contributions are:
-
-\begin{enumerate}\itemsep0pt
-\item A noise-floor audit of offline evaluation on this task, with three independent
-  estimators and four paired offline-versus-board tests on the true blind gold
-  (Sections~\ref{sec:setup} and \ref{sec:results}).
-\item A validated protocol for using a second track as a measurement instrument, including
-  a byte-identical cross-track parity proof and two Codabench mechanics that changed our
-  decisions more than any model change did (Section~\ref{sec:setup}).
-\item A cutpoint calibration that was the one lever whose effect cleared the noise floor,
-  worth 84.1 to 84.5 on the board, with both endpoints of the interpolation worse than the
-  midpoint (Section~\ref{sec:system}).
-\item An audited submission ledger with five refuted hypotheses and a catalogue of
-  improvements the ensemble absorbed without moving, so that neither is re-attempted
-  (Section~\ref{sec:results}, Appendices~\ref{app:ledger} and \ref{app:negative}).
-\end{enumerate}
+We contribute a noise-floor audit of offline evaluation on this task, with three independent
+estimators and four paired offline-versus-board tests on the true blind gold; a validated
+protocol for using a second track as a measurement instrument, including a byte-identical
+cross-track parity proof and two competition mechanics that changed our decisions more than
+any model change did; a cutpoint calibration that was the one lever whose effect cleared the
+noise floor, worth 84.1 to 84.5 on the board; and an audited ledger with five refuted
+hypotheses and a catalogue of improvements the ensemble absorbed without moving, so that
+neither is re-attempted (Appendices~\ref{app:ledger} and \ref{app:negative}).
 
 \section{Background}
 
@@ -94,85 +87,65 @@ BAREC grades Arabic sentences on a 19-level ordinal scale aligned to a pedagogic
 progression \citep{elmadani-etal-2025-large,habash-etal-2025-guidelines}. The shared task
 evaluates systems with Quadratic Weighted Kappa
 \citep{elmadani-etal-2025-barec-shared-task}. QWK penalises an error by the square of its
-distance in levels, which means a system is judged on the shape of its prediction
-distribution at least as much as on per-sentence accuracy. That property drove most of what
-we did, and it is visible in the final standings: two teams finished with far higher exact
-accuracy than ours and far lower QWK.
+distance in levels, so a system is judged on the shape of its prediction distribution at
+least as much as on per-sentence accuracy. That drove most of what we did, and it is visible
+in the final standings: two teams finished with far higher exact accuracy than ours and far
+lower QWK.
 
 We entered the sentence-level Open and Strict tracks. Three results from the 2025 edition
-shaped our plan. Ensembling across loss families was the winning margin, with the 2025
-winner reporting 84.8 for its best single model rising to 87.5 for the full ensemble.
-Ordinal framing and D3Tok morphological tokenisation are table stakes, worth roughly +3.1
-and +1.0 respectively on the organisers' own baselines. External data mostly did not help,
-and the organisers say so directly: the 2025 winner scored worse in Open than in Strict.
-
-That last point is why our Open and Strict systems are identical. We did not treat the Open
-track as a licence to add outside corpora. We treated it as a second measurement of the same
-blind gold, which turned out to be worth more.
+shaped our plan. Ensembling across loss families was the winning margin: the winning system
+\citep{basem-etal-2025-msa} combined four Arabic encoders under three loss families and
+reported 84.8 for its best single model rising to 87.5 for the full ensemble, and the
+runner-up stacked seven regression base learners under a meta-classifier
+\citep{saeed-etal-2025-amar}. Ordinal framing and D3Tok morphological tokenisation are table
+stakes, worth roughly +3.1 and +1.0 respectively on the organisers' own baselines, and other
+entries explored ordinal heads, uncertainty-aware decoding and differentiable QWK surrogates
+\citep{nazzal-2025-zai,abdou-2025-mucai,trigui-2025-stbw,eldin-2025-morphoarabia}. External
+data mostly did not help, and the organisers say so directly: the winning system scored
+worse in Open than in Strict. That last point is why our Open and Strict systems are
+identical. We did not treat the Open track as a licence to add outside corpora, but as a
+second measurement of the same blind gold, which turned out to be worth more.
 
 \section{System Overview}
 \label{sec:system}
 
 \subsection{Members and blend}
 
-The final system averages fourteen z-standardised member scores at equal weight
-(Table~\ref{tab:members}). Standardisation is per split: each member's validation scores and
-blind scores are standardised independently, then averaged. Members came from a cluster grid
-of 113 completed fine-tuning runs over 13 backbones, 6 loss families (cross-entropy,
-regression, CORN, soft-label, focal, soft-QWK), three input views and multiple seeds,
-combined with public checkpoints into a pool of 172 candidate members, of which 26 are
-seed-averaged families. Appendix~\ref{app:fleet} gives the grid and hyperparameters.
-
-\begin{table}[t]
-\centering\small
-\begin{tabular}{@{}llc@{}}
-\toprule
-family & head / input & seats \\
-\midrule
-public CAMeL-Lab + QARiB & CE and reg, Word/D3Tok/raw & 4 \\
-AraBERT v02 / v2 & CE and reg, Word/D3Tok & 3 \\
-CAMeLBERT & CE and reg, Word & 2 \\
-QARiB, MARBERTv2 & CE, raw & 2 \\
-AraBERT-large v02, AraELECTRA & reg, Word & 2 \\
-XLM-R-large & reg, raw & 1 \\
-\bottomrule
-\end{tabular}
-\caption{The fourteen seats of the final system, grouped by backbone family. Nine seats are
-seed-averaged families of our own fine-tunes, four are public checkpoints, one is a single
-run. Four seats use variants retrained on train plus the released test split, which is
-legal in both tracks. The exact member list is in Appendix~\ref{app:fleet}.}
-\label{tab:members}
-\end{table}
+The final system averages fourteen z-standardised member scores at equal weight,
+standardising each member's validation and blind scores independently before averaging. Four
+seats are public checkpoints, nine are seed-averaged families of our own fine-tunes and one
+is a single run; four use variants retrained on train plus the released test split, legal in
+both tracks. Members came from a cluster grid of 113 completed
+fine-tuning runs over 13 backbones, 6 loss families and three input views, combined with
+public checkpoints into a pool of 172 candidates (Appendix~\ref{app:fleet}).
 
 \subsection{The measurement chain}
 
 Before training anything we reimplemented the official scorer and gated the project on exact
-agreement. Our implementation reproduces the official evaluation script string-for-string on
-the provided development fixture, including all six secondary metrics. A separate entry
-point pins the label set to $[1,19]$ for per-fold evaluation, where a sparse tail would
-otherwise silently build a smaller confusion matrix and return a number the official scorer
-would never produce. The gate paid for itself in one upload: a development-phase submission
-whose local test QWK was 86.10 returned 86.10 on the board with all seven metrics matching,
-confirming that our grader is the board's grader.
+agreement, reproducing the official script string-for-string on the development fixture
+including all six secondary metrics. A separate entry point pins the label set to $[1,19]$
+for per-fold evaluation, where a sparse tail would otherwise silently build a smaller
+confusion matrix. The gate paid for itself in one upload: a submission whose local test QWK
+was 86.10 returned 86.10 on the board with all seven metrics matching, confirming that our
+grader is the board's grader.
 
 Preprocessing parity is a correctness concern of the same kind. The blind set consists of
-new sentences, so the corpus's gold morphological views are unavailable and must be
-recomputed locally. Two failure modes here are silent. Feeding raw text to a model that
-expects the preprocessed Word view drops that member from 84 QWK to 50, and omitting only
-the character-normalisation step inside the Word pipeline drops exact match against gold
+new sentences, so the corpus's gold morphological views must be recomputed locally with
+CAMeL Tools \citep{obeid-etal-2020-camel}. Two failure modes here are silent: feeding raw
+text to a model that expects the Word view drops that member from 84 QWK to 50, and omitting
+only the character-normalisation step inside that pipeline drops exact match against gold
 from 99\% to 31\%. Neither raises an error; both produce a plausible submission.
 
 The subtler version cost us a member. Our locally computed D3Tok matches the released gold
-D3Tok at about 76\%, because the released column was produced with a license-gated
-morphological database. Measured naively, this appeared to cost the regression member 84.68
-to 82.75, and we shipped a word-only ensemble. That conclusion was wrong, and the error was
-not in the pipeline but in the standardisation: the comparison took the member's validation
-scores from the gold column while taking its blind scores from our own pipeline. Those are
-two different input distributions, and z-scoring cannot reconcile them. Recomputing
-validation through the same pipeline as blind made the member self-consistent, and adding it
-back was worth +0.3 on the board, more than every calibration experiment after the first
-combined. The rule we would give another team: a member's standardisation statistics and the
-scores they are applied to must come from one pipeline, end to end.
+at about 76\%, because the released column used a license-gated morphological database.
+Measured naively this appeared to cost the regression member 84.68 to 82.75, so we shipped a
+word-only ensemble. That was wrong, and the error was not in the pipeline but in the
+standardisation: the comparison took the member's validation scores from the gold column
+while taking its blind scores from ours. Those are different input distributions, and
+z-scoring cannot reconcile them. Recomputing validation through the same pipeline as blind
+made the member self-consistent, and adding it back was worth +0.3 on the board, more than
+every later calibration experiment combined. The rule: a member's standardisation statistics
+and the scores they are applied to must come from one pipeline, end to end.
 
 \subsection{Half-match cutpoint calibration}
 
@@ -197,24 +170,22 @@ validation and what would make the blind prediction histogram match the corpus p
 We measured $f$ on the live board, because blind has no labels and the test split does not
 exhibit the shift that motivates the correction. The curve is single-peaked: $f=0$ gives
 84.1, $f=0.50$ gives 84.5, $f=0.60$ gives 84.4, and $f=1$ gives 84.0. Both endpoints are
-worse than the midpoint, by 0.4 and 0.5. We read this as the two targets carrying
-complementary and partly wrong information: the rounder knows the score-to-level mapping but
-assumes the wrong score distribution, while the prior match knows the right output
-distribution but discards the ordering information the rounder found. After five readings we
-stopped tuning $f$, since the peak is flat between 0.5 and 0.6 at the board's resolution.
+worse than the midpoint, by 0.4 and 0.5, because the two targets carry complementary and
+partly wrong information: the rounder knows the score-to-level mapping but assumes the wrong
+score distribution, while the prior match knows the right output distribution but discards
+the rounder's ordering information. After five readings we stopped tuning $f$.
 
 \section{Experimental Setup}
 \label{sec:setup}
 
-The 2026 sentence-level release provides train (54,845 sentences over 1,518 documents),
-validation (7,310) and test (7,286) with gold labels, and a blind test of 8,077 sentences
-over 212 documents. Folds are built once with grouped stratified 5-fold cross-validation,
-grouped on document so that topic and vocabulary do not leak across the split, and
-serialised to a committed document-to-fold map that is never regenerated. Our go/no-go
-number is a nested out-of-fold QWK in which cutpoints are fitted on the other folds' scores
-and applied to the held-out fold, so thresholds never see the rows they score. Every member
-shows validation below test by about 1.3 QWK, which correctly predicted that the blind set
-would score nearer 85 than 86.
+The release provides train (54,845 sentences over 1,518 documents), validation (7,310) and
+test (7,286) with gold labels, and a blind test of 8,077 sentences over 212 documents. Folds
+are built once with grouped stratified 5-fold cross-validation, grouped on document so topic
+and vocabulary do not leak, and serialised to a committed fold map that is never
+regenerated. Our go/no-go number is a nested out-of-fold QWK in which cutpoints are fitted
+on the other folds and applied to the held-out fold, so thresholds never see the rows they
+score. Every member shows validation below test by about 1.3 QWK, which correctly predicted
+the blind set would score nearer 85 than 86.
 
 \paragraph{Calibrating the instrument.} We estimated the noise of that protocol three ways.
 Holding data, members and weights fixed and varying only the threshold search grid between
@@ -270,38 +241,36 @@ and then measured on the blind gold.}
 
 The precision of an offline protocol is not its accuracy. Our nested out-of-fold
 measurements carry a standard deviation of 0.019 across grid settings, which invites reading
-the +0.406 MARBERTv2 gain as twenty standard deviations of signal. The board returned $-0.1$.
-The 0.019 is the reproducibility of the procedure, not the uncertainty of the quantity it
-estimates. Nested cross-validation controls threshold overfitting and says nothing about
-distribution shift between the tuning sample and the target sample, which is what separated
-validation from blind here.
+the +0.406 MARBERTv2 gain as twenty standard deviations of signal; the board returned
+$-0.1$. That 0.019 is the reproducibility of the procedure, not the uncertainty of the
+quantity it estimates. Nested cross-validation controls threshold overfitting and says
+nothing about distribution shift between the tuning and target samples, which is what
+separated validation from blind here.
 
 \subsection{Saturation}
 
-Once the ensemble reached fourteen members, it absorbed everything. Against a plain
-equal-weight baseline of 85.281 on honest nested out-of-fold, non-negative least squares
-weights and their ridge-shrunk variants scored 84.79 to 85.10, direct-QWK coordinate ascent
-84.97, an expanded 44-member pool under fitted weights 84.94 to 85.10, per-member isotonic
-calibration 84.74 to 85.12, and median, trimmed-mean and rank-mean aggregation 84.79 to
-85.01. Every one is below equal weight. Validation cannot support fourteen fitted
-parameters, and the row-wise extremes that robust aggregators discard carry real ordinal
-signal.
+Once the ensemble reached fourteen members it absorbed everything. Against an equal-weight
+baseline of 85.281 on honest nested out-of-fold, twenty fitted-aggregation configurations
+scored between 84.74 and 85.12: non-negative least squares weights and ridge-shrunk
+variants, direct-QWK coordinate ascent, an expanded 44-member pool, per-member isotonic
+calibration, and median, trimmed-mean and rank-mean aggregation
+(Appendix~\ref{app:saturation}). Every one is below equal weight. Validation cannot support
+fourteen fitted parameters, and the row-wise extremes that robust aggregators discard carry
+real ordinal signal.
 
-Member-level improvements were absorbed too. We built a word-to-D3Tok lexicon from the gold
-corpus alignment, which raised sentence-exact fidelity against the gold column from 63.7\%
-to 79.1\% and lifted the affected member by +0.91 QWK solo. At blend level the same change
-was worth between $-0.02$ and $+0.001$. The cleaned member correlates more with the rest of
-the pack, and its solo gain trades one for one against lost diversity. Retraining the five
-strongest families on train plus test, a 13\% increase in gold data, moved the blend by
-+0.008.
+Member-level gains were absorbed too. A word-to-D3Tok lexicon raised sentence-exact fidelity
+from 63.7\% to 79.1\% and lifted the affected member by +0.91 QWK solo, yet moved the blend
+by between $-0.02$ and $+0.001$: the cleaned member correlates more with the pack, so its
+solo gain trades one for one against lost diversity. Retraining the five strongest families
+on train plus test, 13\% more gold data, moved the blend by +0.008.
 
 \subsection{The endgame}
 
 With the mean provably capped, we changed the selection criterion. A dual gate, requiring a
 candidate to beat the baseline on both honest nested out-of-fold and a deployment-mirrored
-oracle on a second labelled holdout, predicted that four staged candidates were statistical
-ties; probed on the board they returned 85.2, 85.2, 85.2 and 85.3, which is four for four at
-the board's resolution. So we stopped ranking candidates by offline score and ranked them by
+oracle on a second labelled holdout, called four staged candidates statistical ties; probed
+on the board they returned 85.2, 85.2, 85.2 and 85.3, four for four at the board's
+resolution. So we stopped ranking candidates by offline score and ranked them by
 disagreement with the incumbent. Five near-clones, differing on 2\% to 6\% of rows, drew
 ties; the candidate that changed 811 of 8,077 predictions, 10.0\%, drew the 0.1 that closed
 the campaign and became our final 85.4 on both tracks.
@@ -309,11 +278,11 @@ the campaign and became our final 85.4 on both tracks.
 \subsection{Final standing}
 
 We finished second on both tracks with 85.4 QWK, 37.8 exact accuracy, 71.3 adjacent
-accuracy, average distance 1.1, and 60.1 / 67.1 / 74.8 at 7, 5 and 3 collapsed levels. In
-Open, 4 submissions were ranked and the winner scored 85.5. In Strict, 11 were ranked; the
-winner also scored 85.4 and took first place on the earlier timestamp. The winner's exact
-accuracy exceeded ours on both tracks, 39.5 against 37.8 in Open, which marks a system-level
-difference our pool could not reach by recombination, calibration or retraining.
+accuracy, average distance 1.1, and 60.1 / 67.1 / 74.8 at 7, 5 and 3 collapsed levels. Open
+ranked 4 submissions and the winner scored 85.5; Strict ranked 11, and the winner also
+scored 85.4, taking first on the earlier timestamp. The winner's exact accuracy exceeded
+ours on both tracks, 39.5 against 37.8 in Open, marking a system-level difference our pool
+could not reach by recombination, calibration or retraining.
 
 \section{Conclusion}
 
@@ -322,19 +291,18 @@ out-of-fold estimate is not automatically an honest estimate; ours was correctly
 and still over-promised by 0.5 QWK. Second, the reported standard deviation of a repeated
 measurement is not the uncertainty of what it measures. Third, on this task the leaderboard
 was the only instrument with adequate resolution, and the second track let us use it without
-risk. We would not recommend this in general, since it is available only because two tracks
-score the same gold and one of them had a wide enough margin that a losing probe was free.
-Teams without such a margin should budget their submissions as measurements rather than as
-attempts.
+risk. That is not general advice, since it requires two tracks scoring the same gold and a
+margin wide enough to make a losing probe free; teams without one should budget submissions
+as measurements rather than as attempts.
 
 The counterfactual is worth stating plainly. Our own prioritisation document, written before
 these probes, ranked recovering the MARBERTv2 weights as the highest-value action remaining,
-on the strength of a +0.41 offline estimate. Following that plan as written would have
-shipped 84.7. If a seven-thousand-row holdout cannot resolve 0.2 QWK, then some fraction of
-the ablation gains published for QWK-scored tasks, possibly including some in this paper,
-are reports of noise. We think the useful response is for participants with board access to
-publish paired offline-versus-board comparisons routinely, so the field can estimate how
-much of its reported progress survives a fresh sample.
+on a +0.41 offline estimate. Following it as written would have shipped 84.7. If a
+seven-thousand-row holdout cannot resolve 0.2 QWK, then some fraction of the ablation gains
+published for QWK-scored tasks, possibly including some in this paper, are reports of noise.
+The useful response is for participants with board access to publish paired
+offline-versus-board comparisons routinely, so the field can estimate how much of its
+reported progress survives a fresh sample.
 
 \section*{Limitations}
 
