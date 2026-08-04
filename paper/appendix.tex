@@ -138,13 +138,13 @@ own MARBERT, AraELECTRA, XLM-R & CE, reg; raw, Word & 3 \\
 \end{tabular}
 \caption{The fourteen seats, by origin. Nine are seed-averaged families of our own
 fine-tunes, four are public checkpoints, one is a single run; four use variants retrained on
-train plus the released test split, legal in both tracks. The exact member list is given
+train plus the corpus's publicly released gold test split. The exact member list is given
 below.}
 \label{tab:members}
 \end{table}
 
 
-Both tracks we entered are satisfied by BAREC data alone. We used no external readability resources: the SAMER corpus \citep{alhafni-etal-2024-samer} and the SAMER readability lexicon \citep{al-khalil-etal-2020-large}, which the Constrained track permits, were not used, and we added nothing outside BAREC in the Open track either, since the 2025 evidence is that external data does not help on this task.
+Both tracks we entered are satisfied by BAREC data alone. We used no external readability resources: the SAMER corpus \citep{alhafni-etal-2024-samer} and the SAMER readability lexicon \citep{al-khalil-etal-2020-large}, listed for the Constrained and Open tracks, were not used, and we added nothing outside BAREC in the Open track either, since the 2025 evidence is that external data does not help on this task.
 
 Training used a Slurm job array on A100 GPUs. One trainer script takes backbone, loss,
 input view, seed, learning rate and warmup ratio, and writes validation and test score
@@ -176,6 +176,13 @@ retrained on train plus test; seed-averaged families of \texttt{camelbert-ce-wor
 \texttt{qarib-ce-raw}, \texttt{araelectra-reg-word}, \texttt{camelbert-reg-word} and
 \texttt{arabertv2-ce-d3tok}; and a single \texttt{xlm-roberta-large} regression run.
 
+One disclosure belongs here in full view. Four seats are retrained on the concatenation of
+the train and released test splits. The released test split ships gold labels publicly as
+part of the BAREC Corpus, which is the data source the track descriptions list; the blind
+set remains unseen by every member. The 2025 organisers asterisked a sentence-track system
+that had trained on the development set, so rather than assert a classification ourselves
+we state the fact prominently and leave the judgement to the organisers.
+
 \section{Harness detail}
 \label{app:harness}
 
@@ -203,10 +210,13 @@ levels.
 \label{app:repro}
 
 Code, the fine-tuning grid, and the per-run validation and test score arrays are at
-\url{https://github.com/thylinao1/barec-2026-readability} under an MIT license. The final
-submission is reproduced from that repository byte for byte; its SHA-256 is
-\texttt{e243ab46a0edb09e} \texttt{1361e8bcb52159708e2f22bb4d90063c5206932db0bf2516}, and the
-exact command is in the repository README.
+\url{https://github.com/thylinao1/barec-2026-readability} under an MIT license. Rebuilding the
+final submission from the committed blender and the member score arrays reproduces the
+submitted file byte for byte; its SHA-256 is
+\texttt{e243ab46a0edb09e} \texttt{1361e8bcb52159708e2f22bb4d90063c5206932db0bf2516}. The
+member arrays computed over the blind input are withheld together with everything else
+derived from the confidential blind set, so the rebuild command in the repository README
+needs either those arrays or the blind input to regenerate them.
 
 Predictions over the blind test set are deliberately not published. The blind set is
 released only to registered participants and may be reused in a future edition, so a strong

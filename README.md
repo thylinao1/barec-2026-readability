@@ -40,7 +40,8 @@ measured, and that is what this repository is organised around.
 ## The final system
 
 Fourteen members, equal weight, z-standardised per split, half-match calibration at
-`f = 0.50`. Reproduced from this repository byte for byte:
+`f = 0.50`. With the member blind score arrays in place, the committed blender rebuilds the
+submitted file byte for byte:
 
 ```
 sha256(prediction) = e243ab46a0edb09e1361e8bcb52159708e2f22bb4d90063c5206932db0bf2516
