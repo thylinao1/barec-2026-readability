@@ -1,0 +1,19 @@
+{
+  "backbone": "aubmindlab/bert-large-arabertv02",
+  "loss": "corn",
+  "input": "word",
+  "seed": 42,
+  "name": "alarge02-corn-word-s42",
+  "lr": 1e-05,
+  "epochs": 5,
+  "batch": 16,
+  "max_len": 128,
+  "warmup": 0.06,
+  "soft_sigma": 1.0,
+  "data_dir": "/home/e/e1506804/barec/data",
+  "out_dir": "/home/e/e1506804/barec/runs",
+  "smoke": false,
+  "val_naive_qwk": 0.82778,
+  "test_naive_qwk": 0.83714,
+  "minutes": 34.7
+}

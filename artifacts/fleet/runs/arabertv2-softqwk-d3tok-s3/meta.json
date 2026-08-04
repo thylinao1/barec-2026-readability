@@ -1,0 +1,19 @@
+{
+  "backbone": "aubmindlab/bert-base-arabertv2",
+  "loss": "softqwk",
+  "input": "d3tok",
+  "seed": 3,
+  "name": "arabertv2-softqwk-d3tok-s3",
+  "lr": 2e-05,
+  "epochs": 5,
+  "batch": 16,
+  "max_len": 128,
+  "warmup": 0.0,
+  "soft_sigma": 1.0,
+  "data_dir": "/home/e/e1506804/barec/data",
+  "out_dir": "/home/e/e1506804/barec/runs",
+  "smoke": false,
+  "val_naive_qwk": 0.82687,
+  "test_naive_qwk": 0.83757,
+  "minutes": 10.4
+}

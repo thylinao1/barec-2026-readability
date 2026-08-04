@@ -1,0 +1,24 @@
+{
+  "seed": 20260714,
+  "n_splits": 5,
+  "n_documents": 1518,
+  "n_sentences": 54845,
+  "target": "Readability_Level_19",
+  "group": "Document",
+  "fold_sentence_counts": {
+    "0": 10973,
+    "1": 10965,
+    "2": 10963,
+    "3": 10970,
+    "4": 10974
+  },
+  "fold_levels_missing": {
+    "0": [],
+    "1": [],
+    "2": [],
+    "3": [],
+    "4": []
+  },
+  "sha256_16": "e77ab7346c12f337",
+  "source": "CAMeL-Lab/BAREC-Shared-Task-2026-sent train"
+}

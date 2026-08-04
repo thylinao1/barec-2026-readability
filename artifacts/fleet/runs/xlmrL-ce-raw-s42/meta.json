@@ -1,0 +1,19 @@
+{
+  "backbone": "FacebookAI/xlm-roberta-large",
+  "loss": "ce",
+  "input": "raw",
+  "seed": 42,
+  "name": "xlmrL-ce-raw-s42",
+  "lr": 1e-05,
+  "epochs": 5,
+  "batch": 16,
+  "max_len": 128,
+  "warmup": 0.06,
+  "soft_sigma": 1.0,
+  "data_dir": "/home/e/e1506804/barec/data",
+  "out_dir": "/home/e/e1506804/barec/runs",
+  "smoke": false,
+  "val_naive_qwk": 0.81231,
+  "test_naive_qwk": 0.81811,
+  "minutes": 29.3
+}

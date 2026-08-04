@@ -1,0 +1,19 @@
+{
+  "backbone": "ahmedabdelali/bert-base-qarib60_1970k",
+  "loss": "ce",
+  "input": "raw",
+  "seed": 4,
+  "name": "qarib60-ce-raw-s4",
+  "lr": 2e-05,
+  "epochs": 5,
+  "batch": 16,
+  "max_len": 128,
+  "warmup": 0.0,
+  "soft_sigma": 1.0,
+  "data_dir": "/home/e/e1506804/barec/data",
+  "out_dir": "/home/e/e1506804/barec/runs",
+  "smoke": false,
+  "val_naive_qwk": 0.77398,
+  "test_naive_qwk": 0.80085,
+  "minutes": 12.7
+}

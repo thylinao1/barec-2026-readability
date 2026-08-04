@@ -1,0 +1,19 @@
+{
+  "backbone": "microsoft/mdeberta-v3-base",
+  "loss": "ce",
+  "input": "raw",
+  "seed": 42,
+  "name": "mdeberta-ce-raw-s42",
+  "lr": 2e-05,
+  "epochs": 5,
+  "batch": 16,
+  "max_len": 128,
+  "warmup": 0.0,
+  "soft_sigma": 1.0,
+  "data_dir": "/home/e/e1506804/barec/data",
+  "out_dir": "/home/e/e1506804/barec/runs",
+  "smoke": false,
+  "val_naive_qwk": 0.80666,
+  "test_naive_qwk": 0.80879,
+  "minutes": 32.5
+}

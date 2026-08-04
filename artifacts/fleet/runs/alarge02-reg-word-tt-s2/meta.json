@@ -1,0 +1,20 @@
+{
+  "backbone": "aubmindlab/bert-large-arabertv02",
+  "loss": "reg",
+  "input": "word",
+  "seed": 2,
+  "name": "alarge02-reg-word-tt-s2",
+  "lr": 1e-05,
+  "epochs": 5,
+  "batch": 16,
+  "max_len": 128,
+  "warmup": 0.06,
+  "extra_train": "test",
+  "soft_sigma": 1.0,
+  "data_dir": "/home/e/e1506804/barec/data",
+  "out_dir": "/home/e/e1506804/barec/runs",
+  "smoke": false,
+  "val_naive_qwk": 0.82998,
+  "test_naive_qwk": 0.91676,
+  "minutes": 35.6
+}
