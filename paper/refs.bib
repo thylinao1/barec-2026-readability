@@ -1,20 +1,47 @@
 % ---------------------------------------------------------------------------
 % REQUIRED CITATIONS. Copied verbatim from the organisers' page:
-% https://barec.camel-lab.com/sharedtask2026/paper-guidelines  (fetched 2026-08-04)
-% Do not edit these five entries.
+% https://barec.camel-lab.com/sharedtask2026/paper-guidelines
+% Re-checked 2026-08-06 against that page and against custom.bib in the
+% organisers' Overleaf template (https://www.overleaf.com/read/xpmgjmsqtphr).
+% The two sources agree byte for byte.
+%
+% CHANGED SINCE 2026-08-04: required citation #1 is now the 2026 overview
+% (elmadani-etal-2026-barec-shared-task), not the 2025 one. The 2025 overview
+% is kept below as related work, upgraded to the organisers' current entry
+% with the published venue, pages and DOI.
+% Required for every paper: 2026 overview, 2025 corpus, 2025 guidelines.
+% Required only for the Constrained track: SAMER corpus and SAMER lexicon.
+% Do not edit these entries.
 % ---------------------------------------------------------------------------
 
-@inproceedings{elmadani-etal-2025-barec-shared-task,
-    title = "{BAREC} Shared Task 2025 on {A}rabic Readability Assessment",
+@inproceedings{elmadani-etal-2026-barec-shared-task,
+    title = "{BAREC}-{ST}-2026: The Second Shared Task on {A}rabic Readability Assessment",
     author = "Elmadani, Khalid N. and
       Alhafni, Bashar and
       Taha, Hanada and
       Habash, Nizar",
-    booktitle = "Proceedings of the Third Arabic Natural Language Processing Conference",
+    booktitle = "Proceedings of the Fourth Arabic Natural Language Processing Conference",
+    month = oct,
+    year = "2026",
+    address = "Budapest, Hungary",
+    publisher = "Association for Computational Linguistics"
+}
+
+@inproceedings{elmadani-etal-2025-barec-shared-task,
+    title = "{BAREC} Shared Task 2025 on {A}rabic Readability Assessment",
+    author = "Elmadani, Khalid N.  and
+      Alhafni, Bashar  and
+      Taha, Hanada  and
+      Habash, Nizar",
+    booktitle = "Proceedings of The Third Arabic Natural Language Processing Conference: Shared Tasks",
     month = nov,
     year = "2025",
     address = "Suzhou, China",
-    publisher = "Association for Computational Linguistics"
+    publisher = "Association for Computational Linguistics",
+    url = "https://aclanthology.org/2025.arabicnlp-sharedtasks.34/",
+    doi = "10.18653/v1/2025.arabicnlp-sharedtasks.34",
+    pages = "239--252",
+    ISBN = "979-8-89176-356-2"
 }
 
 @inproceedings{elmadani-etal-2025-large,
@@ -176,4 +203,150 @@
     journal = "Pattern Analysis and Applications",
     year = "2023", volume = "26", number = "3", pages = "941--955",
     doi = "10.1007/s10044-023-01181-9"
+}
+% ---------------------------------------------------------------------------
+% MISSING PRETRAINED-MODEL CITATIONS for refs.bib
+% Every entry below was pulled from https://aclanthology.org/<id>.bib on
+% 2026-08-17 and is byte-identical to the Anthology record, except the two
+% arXiv-only entries at the bottom which were checked against arxiv.org.
+% ---------------------------------------------------------------------------
+
+% AraBERT (aubmindlab/bert-base-arabertv02, -arabertv2, bert-large-arabertv02/v2)
+@inproceedings{antoun-etal-2020-arabert,
+    title = "{A}ra{BERT}: Transformer-based Model for {A}rabic Language Understanding",
+    author = "Antoun, Wissam  and
+      Baly, Fady  and
+      Hajj, Hazem",
+    editor = "Al-Khalifa, Hend  and
+      Magdy, Walid  and
+      Darwish, Kareem  and
+      Elsayed, Tamer  and
+      Mubarak, Hamdy",
+    booktitle = "Proceedings of the 4th Workshop on Open-Source Arabic Corpora and Processing Tools, with a Shared Task on Offensive Language Detection",
+    month = may,
+    year = "2020",
+    address = "Marseille, France",
+    publisher = "European Language Resources Association",
+    url = "https://aclanthology.org/2020.osact-1.2/",
+    pages = "9--15",
+    language = "eng",
+    ISBN = "979-10-95546-51-1"
+}
+
+% AraELECTRA (aubmindlab/araelectra-base-discriminator)
+@inproceedings{antoun-etal-2021-araelectra,
+    title = "{A}ra{ELECTRA}: Pre-Training Text Discriminators for {A}rabic Language Understanding",
+    author = "Antoun, Wissam  and
+      Baly, Fady  and
+      Hajj, Hazem",
+    editor = "Habash, Nizar  and
+      Bouamor, Houda  and
+      Hajj, Hazem  and
+      Magdy, Walid  and
+      Zaghouani, Wajdi  and
+      Bougares, Fethi  and
+      Tomeh, Nadi  and
+      Abu Farha, Ibrahim  and
+      Touileb, Samia",
+    booktitle = "Proceedings of the Sixth Arabic Natural Language Processing Workshop",
+    month = apr,
+    year = "2021",
+    address = "Kyiv, Ukraine (Virtual)",
+    publisher = "Association for Computational Linguistics",
+    url = "https://aclanthology.org/2021.wanlp-1.20/",
+    pages = "191--195"
+}
+
+% ARBERTv2 / MARBERTv2 (UBC-NLP/MARBERTv2, UBC-NLP/ARBERTv2)
+@inproceedings{abdul-mageed-etal-2021-arbert,
+    title = "{ARBERT} {\&} {MARBERT}: Deep Bidirectional Transformers for {A}rabic",
+    author = "Abdul-Mageed, Muhammad  and
+      Elmadany, AbdelRahim  and
+      Nagoudi, El Moatez Billah",
+    editor = "Zong, Chengqing  and
+      Xia, Fei  and
+      Li, Wenjie  and
+      Navigli, Roberto",
+    booktitle = "Proceedings of the 59th Annual Meeting of the Association for Computational Linguistics and the 11th International Joint Conference on Natural Language Processing (Volume 1: Long Papers)",
+    month = aug,
+    year = "2021",
+    address = "Online",
+    publisher = "Association for Computational Linguistics",
+    url = "https://aclanthology.org/2021.acl-long.551/",
+    doi = "10.18653/v1/2021.acl-long.551",
+    pages = "7088--7105"
+}
+
+% CAMeLBERT (CAMeL-Lab/bert-base-arabic-camelbert-msa, -ca)
+@inproceedings{inoue-etal-2021-interplay,
+    title = "The Interplay of Variant, Size, and Task Type in {A}rabic Pre-trained Language Models",
+    author = "Inoue, Go  and
+      Alhafni, Bashar  and
+      Baimukan, Nurpeiis  and
+      Bouamor, Houda  and
+      Habash, Nizar",
+    editor = "Habash, Nizar  and
+      Bouamor, Houda  and
+      Hajj, Hazem  and
+      Magdy, Walid  and
+      Zaghouani, Wajdi  and
+      Bougares, Fethi  and
+      Tomeh, Nadi  and
+      Abu Farha, Ibrahim  and
+      Touileb, Samia",
+    booktitle = "Proceedings of the Sixth Arabic Natural Language Processing Workshop",
+    month = apr,
+    year = "2021",
+    address = "Kyiv, Ukraine (Virtual)",
+    publisher = "Association for Computational Linguistics",
+    url = "https://aclanthology.org/2021.wanlp-1.10/",
+    pages = "92--104"
+}
+
+% XLM-RoBERTa large (FacebookAI/xlm-roberta-large)
+@inproceedings{conneau-etal-2020-unsupervised,
+    title = "Unsupervised Cross-lingual Representation Learning at Scale",
+    author = "Conneau, Alexis  and
+      Khandelwal, Kartikay  and
+      Goyal, Naman  and
+      Chaudhary, Vishrav  and
+      Wenzek, Guillaume  and
+      Guzm{\'a}n, Francisco  and
+      Grave, Edouard  and
+      Ott, Myle  and
+      Zettlemoyer, Luke  and
+      Stoyanov, Veselin",
+    editor = "Jurafsky, Dan  and
+      Chai, Joyce  and
+      Schluter, Natalie  and
+      Tetreault, Joel",
+    booktitle = "Proceedings of the 58th Annual Meeting of the Association for Computational Linguistics",
+    month = jul,
+    year = "2020",
+    address = "Online",
+    publisher = "Association for Computational Linguistics",
+    url = "https://aclanthology.org/2020.acl-main.747/",
+    doi = "10.18653/v1/2020.acl-main.747",
+    pages = "8440--8451"
+}
+
+% QARiB (ahmedabdelali/bert-base-qarib, bert-base-qarib60_1970k). arXiv only,
+% no ACL Anthology record.
+@article{abdelali-etal-2021-qarib,
+    title = "Pre-Training {BERT} on {A}rabic Tweets: Practical Considerations",
+    author = "Abdelali, Ahmed and Hassan, Sabit and Mubarak, Hamdy and
+      Darwish, Kareem and Samih, Younes",
+    journal = "arXiv preprint arXiv:2102.10684",
+    year = "2021",
+    url = "https://arxiv.org/abs/2102.10684"
+}
+
+% mDeBERTa v3 (microsoft/mdeberta-v3-base) -- only needed if the mDeBERTa
+% backbone stays inside the "13 backbones" count.
+@inproceedings{he-etal-2023-debertav3,
+    title = "{DeBERT}a{V}3: Improving {DeBERT}a using {ELECTRA}-Style Pre-Training with Gradient-Disentangled Embedding Sharing",
+    author = "He, Pengcheng and Gao, Jianfeng and Chen, Weizhu",
+    booktitle = "The Eleventh International Conference on Learning Representations (ICLR)",
+    year = "2023",
+    url = "https://openreview.net/forum?id=sE7-XhLxHA"
 }

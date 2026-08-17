@@ -21,6 +21,23 @@ Source: `https://barec.camel-lab.com/sharedtask2026` and `.../paper-guidelines`,
   Overview, Experimental Setup, Results, Conclusion, Appendices.
 - Five required citations, BibTeX supplied by the organisers, copied verbatim into
   `paper/latex/refs.bib`.
+  **RE-CHECKED 2026-08-06: the organisers changed required citation #1.** It is now the
+  2026 overview, `elmadani-etal-2026-barec-shared-task` ("BAREC-ST-2026: The Second Shared
+  Task on Arabic Readability Assessment", ArabicNLP 2026, Budapest), where on 2026-08-04
+  the page listed the 2025 overview. Same list otherwise: BAREC corpus
+  (`elmadani-etal-2025-large`), annotation guidelines (`habash-etal-2025-guidelines`), and
+  SAMER corpus plus SAMER lexicon which are required only for the Constrained track.
+  The 2026 entry was added to `refs.bib` and is cited in Background; the 2025 overview is
+  kept as related work. Verified in the compiled PDF on 2026-08-06.
+  Cross-checked against `custom.bib` in the organisers' Overleaf template
+  (`https://www.overleaf.com/read/xpmgjmsqtphr`, emailed 2026-08-06 by Khalid Elmadani):
+  the template and the guidelines page carry byte-identical BibTeX. The template adds four
+  optional related works not on the guidelines page: `altarbouch-etal-2025-barec` (BAREC
+  demo), `elmadani-etal-2026-large` (LREC 2026 corpus), `liberato-etal-2024-strategies`,
+  `hazim-etal-2022-arabic`. None is required and none is cited by us.
+  Template section skeleton matches the paper's: Abstract, Introduction, Background
+  (Shared Task Description, Related Work), System Overview, Experimental Setup, Results,
+  Conclusion, Appendices.
 - Binding commitment to submit (blind data was received). One author must register and
   attend. Teams serve as reviewers. Code release encouraged, URL in the paper.
 - Prizes: top system per task+track $100; **Best System Description Paper $250,
@@ -58,7 +75,31 @@ Source: `https://barec.camel-lab.com/sharedtask2026` and `.../paper-guidelines`,
 
 Submission ids and timestamps: Open thylinao id 875866 at 2026-08-03T10:13:41Z; Strict
 thylinao id 875864 at 2026-08-03T10:12:22Z; Strict zaher-m id 875092 at
-2026-08-02T21:03:17Z (earlier, hence the tiebreak loss on an equal 85.4).
+2026-08-02T21:03:17Z.
+
+**CORRECTED 2026-08-12: the Strict tie was NOT lost on the earlier timestamp.** That
+reading was an assumption, and it is wrong. It appears in `main.tex:288-289` ("taking
+first on the earlier timestamp") and in the Experimental Setup mechanic ("ties break
+against the later submission"), so **both need fixing in the camera-ready**.
+
+Re-pulled from the leaderboard API. Primary scores are stored as already-rounded strings
+(`"85.4"`, `"86.3"`, `precision: 2`), so there is no hidden precision doing the ordering.
+Every tie group instead orders by the **secondary metric, exact accuracy, descending**,
+while submission times are scrambled within the group:
+
+| phase | tied QWK | order as displayed (owner, accuracy, submitted) |
+|---|---|---|
+| Strict dev 27157 | 86.3 | thylinao 38.3 (07-16), jhliang 35.9 (07-17), iMak AI Lab 35.0 (07-13) |
+| Strict dev 27157 | 85.2 | ahmedabdou 45.1 (07-17), phonghoang 44.1 (07-08) |
+| Strict final 29342 | 85.4 | zaher-m 38.7 (08-02), thylinao 37.8 (08-03) |
+
+In the first group the earliest submission is listed last and the latest is listed
+second, which rules out submission time in either direction. Three groups, three times
+ordered by accuracy. So Strict second place was decided by exact accuracy, 38.7 against
+37.8, which is the same metric `main.tex:289-291` already identifies as the winner's
+system-level edge. The corrected version is a tidier story than the timestamp one, and
+it does not change any decision that was made: sending only strictly better scores to a
+led track is safe under either rule.
 
 Note the accuracy inversion worth one sentence in the paper: salmadi and monmon2000 have
 much higher exact accuracy (50.6 and 55.6 against our 37.8) and much lower QWK. Under a

@@ -12,7 +12,7 @@ Arabic readability assessment (ArabicNLP 2026, co-located with EMNLP 2026).
 | Strict (11 ranked) | 2 | 85.4 | 37.8 | 71.3 | 1.1 | 60.1 | 67.1 | 74.8 |
 
 The same file was submitted to both tracks. On Strict the first-place entry also scored
-85.4 and won on the earlier timestamp.
+85.4 and placed first on exact accuracy, 38.7 against our 37.8.
 
 ## What is interesting here
 
@@ -99,11 +99,11 @@ the submitted file exactly. Internal campaign notes are also not included.
 The system description paper is in `paper/`. Please also cite the shared task overview:
 
 ```bibtex
-@inproceedings{elmadani-etal-2025-barec-shared-task,
-    title = "{BAREC} Shared Task 2025 on {A}rabic Readability Assessment",
+@inproceedings{elmadani-etal-2026-barec-shared-task,
+    title = "{BAREC}-{ST}-2026: The Second Shared Task on {A}rabic Readability Assessment",
     author = "Elmadani, Khalid N. and Alhafni, Bashar and Taha, Hanada and Habash, Nizar",
-    booktitle = "Proceedings of the Third Arabic Natural Language Processing Conference",
-    month = nov, year = "2025", address = "Suzhou, China",
+    booktitle = "Proceedings of the Fourth Arabic Natural Language Processing Conference",
+    month = oct, year = "2026", address = "Budapest, Hungary",
     publisher = "Association for Computational Linguistics"
 }
 ```

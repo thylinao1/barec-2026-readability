@@ -15,7 +15,7 @@ word-only 3-member & $f = 0$ & 84.1 \\
 \textbf{half-match champion} & $f = 0.50$ & \textbf{84.5} \\
 match-60 & $f = 0.60$ & 84.4 \\
 full distribution match & $f = 1.00$ & 84.0 \\
-metadata-reweighted prior$^\dagger$ & $f = 0.50$ & 83.9 \\
+metadata-reweighted prior & $f = 0.50$ & 83.9 \\
 \textbf{blend4reg} (both tracks) & $f = 0.50$ & \textbf{84.8} \\
 blend5, adds MARBERTv2$^\dagger$ & $f = 0.50$ & 84.7 \\
 blend4reg + doc shrinkage$^\dagger$ & $f = 0.50$ & 84.6 \\
@@ -59,14 +59,16 @@ We suspect this is because BAREC levels are annotated against a reading progress
 than topic difficulty, so domain composition and level composition are less coupled than
 intuition suggests, but we did not test that explanation.
 
-\paragraph{MARBERTv2 as a member, measured at $0.00$ and $-0.1$.} MARBERTv2 was the most
-attractive remaining candidate on paper: a different backbone family, and the least
-correlated with our blend at 0.945 against 0.96 to 0.98 for everything else. Offline it
+\paragraph{MARBERTv2 as a member, measured at $-0.1$.} MARBERTv2 was the most
+attractive remaining candidate on paper: a different backbone family, and among the least
+correlated with our blend at 0.945 against 0.95 to 0.98 for everything else. Offline it
 measured $+0.41$ on the clean test holdout and $+0.406$ on honest nested out-of-fold, the
-largest gain in either table. Recovering it was expensive, because the original fine-tuning
+largest gain in either table. The test-holdout figure did not even reproduce offline: rerun
+from the cached arrays the baseline came out at 85.28 and the blend with the member at
+85.28, a gain of exactly zero. Recovering it was expensive, because the original fine-tuning
 script saved only prediction arrays and never called \texttt{save\_pretrained}, so the model
-existed only as numbers and had to be retrained. On the board it contributed $0.00$ when
-added to the champion and $-0.1$ in the five-member configuration.
+existed only as numbers and had to be retrained. On the board it cost $-0.1$ in the
+five-member configuration, the only configuration containing it that we submitted.
 
 \paragraph{Document-level score shrinkage, measured at $-0.2$.} The blind set ships a
 document column with 212 documents over 8{,}077 sentences, which invites smoothing each
@@ -124,14 +126,14 @@ and a 13\% increase in gold data, moved the blend from 85.281 to 85.289.
 \section{Fine-tuning grid}
 \label{app:fleet}
 
-\begin{table}[t]
+\begin{table*}[t]
 \centering\small
 \begin{tabular}{@{}llc@{}}
 \toprule
 origin & heads / inputs & seats \\
 \midrule
 public checkpoints & CE, reg; Word, D3Tok, raw & 4 \\
-own AraBERT v02/v2/large & CE, reg; Word, D3Tok & 5 \\
+own AraBERT v02/v2/large & CE, reg; Word, D3Tok & 4 \\
 own CAMeLBERT, QARiB & CE, reg; Word, raw & 3 \\
 own MARBERT, AraELECTRA, XLM-R & CE, reg; raw, Word & 3 \\
 \bottomrule
@@ -141,12 +143,14 @@ fine-tunes, four are public checkpoints, one is a single run; four use variants 
 train plus the corpus's publicly released gold test split. The exact member list is given
 below.}
 \label{tab:members}
-\end{table}
+\end{table*}
 
 
 Both tracks we entered are satisfied by BAREC data alone. We used no external readability resources: the SAMER corpus \citep{alhafni-etal-2024-samer} and the SAMER readability lexicon \citep{al-khalil-etal-2020-large}, listed for the Constrained and Open tracks, were not used, and we added nothing outside BAREC in the Open track either, since the 2025 evidence is that external data does not help on this task.
 
-Training used a Slurm job array on A100 GPUs. One trainer script takes backbone, loss,
+Training used a Slurm job array on A100 GPUs, with the single exception of the MARBERTv2
+regression member discussed in Appendix~\ref{app:negative}, which was fine-tuned in a free
+Kaggle notebook on a T4 and is not part of the cluster grid. One trainer script takes backbone, loss,
 input view, seed, learning rate and warmup ratio, and writes validation and test score
 arrays through the same code path used at inference. Defaults: learning rate $2\times
 10^{-5}$, 5 epochs, batch 16, maximum sequence length 128, no warmup except 0.06 for the
@@ -156,9 +160,14 @@ output; CORN follows \citet{shi-etal-2023-corn}.
 
 The dispatched grid has 112 rows over 13 backbones and 6 loss families (cross-entropy 45,
 regression 44, soft-QWK 10, focal 6, CORN 5, soft-label 2), crossing three input views (raw,
-Word, D3Tok) with seeds. 113 runs completed with a done marker and both score arrays. With
+Word, D3Tok) with seeds. All 112 completed with a done marker and both score arrays; a
+smoke-test run brings the total to 113. With
 public checkpoints and seed-averaged families this produced a pool of 172 candidate members,
-26 of them seed averages.
+26 of them seed averages. The thirteen backbones are AraBERT
+\citep{antoun-etal-2020-arabert}, AraELECTRA \citep{antoun-etal-2021-araelectra}, CAMeLBERT
+\citep{inoue-etal-2021-interplay}, QARiB \citep{abdelali-etal-2021-qarib}, ARBERTv2 and
+MARBERTv2 \citep{abdul-mageed-etal-2021-arbert}, XLM-R
+\citep{conneau-etal-2020-unsupervised} and mDeBERTaV3 \citep{he-etal-2023-debertav3}.
 
 Two gates apply before a member may enter a blend, both added after an incident in which a
 checkpoint export was omitted and only prediction arrays survived. The head shape must match
@@ -167,6 +176,7 @@ reproduce the cluster's saved arrays above 0.99 correlation. A member failing ei
 not blended, because a standardisation computed from mismatched scores is silently wrong
 rather than loudly wrong.
 
+\begin{sloppypar}
 The fourteen seats of the final system are: the four public-checkpoint champion members
 (\texttt{arabertv02-word-CE}, \texttt{camelbert-word-CE},
 \texttt{qarib-barec-optimized-v8}, \texttt{arabertv2-d3tok-reg} scored through our own
@@ -174,12 +184,18 @@ D3Tok pipeline); seed-averaged families of \texttt{arabertv2-reg-d3tok},
 \texttt{arabertv02-ce-word}, \texttt{alarge02-reg-word} and \texttt{marbert-ce-raw}, each
 retrained on train plus test; seed-averaged families of \texttt{camelbert-ce-word},
 \texttt{qarib-ce-raw}, \texttt{araelectra-reg-word}, \texttt{camelbert-reg-word} and
-\texttt{arabertv2-ce-d3tok}; and a single \texttt{xlm-roberta-large} regression run.
+\texttt{arabertv2-ce-d3tok}; and a single \texttt{xlm-roberta-large} regression run. The four public checkpoints are
+\texttt{CAMeL-Lab/\allowbreak readability-\allowbreak arabertv02-word-CE},
+\texttt{CAMeL-Lab/\allowbreak readability-\allowbreak camelbert-word-CE} and
+\texttt{CAMeL-Lab/\allowbreak readability-\allowbreak arabertv2-d3tok-reg}, released with the BAREC corpus
+\citep{elmadani-etal-2025-large}, and the community checkpoint
+\texttt{AymanTarig/\allowbreak qarib-barec-optimized-v8}, which has no associated
+publication.\footnote{\url{https://huggingface.co/AymanTarig/qarib-barec-optimized-v8}}
+\end{sloppypar}
 
 One disclosure belongs here in full view. Four seats are retrained on the concatenation of
 the train and released test splits. The released test split ships gold labels publicly as
-part of the BAREC Corpus, which is the data source the track descriptions list; the blind
-set remains unseen by every member. The 2025 organisers asterisked a sentence-track system
+part of the BAREC Corpus; the blind set remains unseen by every member. The 2025 organisers asterisked a sentence-track system
 that had trained on the development set, so rather than assert a classification ourselves
 we state the fact prominently and leave the judgement to the organisers.
 
@@ -213,7 +229,7 @@ Code, the fine-tuning grid, and the per-run validation and test score arrays are
 \url{https://github.com/thylinao1/barec-2026-readability} under an MIT license. Rebuilding the
 final submission from the committed blender and the member score arrays reproduces the
 submitted file byte for byte; its SHA-256 is
-\texttt{e243ab46a0edb09e} \texttt{1361e8bcb52159708e2f22bb4d90063c5206932db0bf2516}. The
+\texttt{e243ab46a0edb09e\allowbreak 1361e8bcb5215970\allowbreak 8e2f22bb4d90063c\allowbreak 5206932db0bf2516}. The
 member arrays computed over the blind input are withheld together with everything else
 derived from the confidential blind set, so the rebuild command in the repository README
 needs either those arrays or the blind input to regenerate them.
