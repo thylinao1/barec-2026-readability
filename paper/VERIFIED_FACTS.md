@@ -1,4 +1,4 @@
-# VERIFIED_FACTS — everything checked first-hand on 2026-08-04
+# Verified facts: everything checked first-hand on 2026-08-04
 
 Only facts confirmed by a live fetch, a run, or a file read appear here. Anything that
 could not be confirmed is listed under "Unconfirmable" with the fallback the paper uses.
@@ -10,18 +10,18 @@ could not be confirmed is listed under "Unconfirmable" with the fallback the pap
 Source: `https://barec.camel-lab.com/sharedtask2026` and `.../paper-guidelines`, plus
 `.../faqs`. All three fetched today.
 
-- **Paper deadline 2026-08-13** (site shows "August 8, 2026" struck through, replaced by
+- Paper deadline 2026-08-13 (the site shows "August 8, 2026" struck through, replaced by
   "August 13, 2026"). Notification 2026-08-15. Camera-ready 2026-08-22.
-- **Length: up to 4 pages, unlimited references.** Over-length is desk rejected.
-- **Title must be** `<Team Name> at BAREC Shared Task 2026: <Your Contribution>`.
+- Length: up to 4 pages, unlimited references. Over-length is desk rejected.
+- The title must read `<Team Name> at BAREC Shared Task 2026: <Your Contribution>`.
 - Template: EMNLP 2026 (ACL) style files, unmodified. Wrong paper size, margins or font
   size is rejected without review.
-- Not anonymous. OpenReview submission; **link still reads "Coming Soon"** as of today.
+- Not anonymous. OpenReview submission; the link still reads "Coming Soon" as of today.
 - Prescribed skeleton: Abstract, Introduction (about 3/4 page), Background, System
   Overview, Experimental Setup, Results, Conclusion, Appendices.
 - Five required citations, BibTeX supplied by the organisers, copied verbatim into
   `paper/latex/refs.bib`.
-  **RE-CHECKED 2026-08-06: the organisers changed required citation #1.** It is now the
+  Re-checked 2026-08-06: the organisers changed required citation #1. It is now the
   2026 overview, `elmadani-etal-2026-barec-shared-task` ("BAREC-ST-2026: The Second Shared
   Task on Arabic Readability Assessment", ArabicNLP 2026, Budapest), where on 2026-08-04
   the page listed the 2025 overview. Same list otherwise: BAREC corpus
@@ -40,15 +40,15 @@ Source: `https://barec.camel-lab.com/sharedtask2026` and `.../paper-guidelines`,
   Conclusion, Appendices.
 - Binding commitment to submit (blind data was received). One author must register and
   attend. Teams serve as reviewers. Code release encouraged, URL in the paper.
-- Prizes: top system per task+track $100; **Best System Description Paper $250,
-  runner-up or honorable mention $150, "regardless of leaderboard ranking"**, judged on
-  "clarity, reproducibility, and insight".
+- Prizes: top system per task+track $100; Best System Description Paper $250, runner-up
+  or honorable mention $150, "regardless of leaderboard ranking", judged on "clarity,
+  reproducibility, and insight".
 
 ## B. Final leaderboard (Codabench API, pulled 2026-08-04)
 
 `api/phases/29340/get_leaderboard/` (Open) and `29342` (Strict).
 
-**Open, 4 ranked submissions**
+Open, 4 ranked submissions:
 
 | # | team | QWK | Acc | Acc±1 | Dist | Acc7 | Acc5 | Acc3 |
 |---|---|---|---|---|---|---|---|---|
@@ -57,7 +57,7 @@ Source: `https://barec.camel-lab.com/sharedtask2026` and `.../paper-guidelines`,
 | 3 | salmadi | 81.7 | 50.6 | 72.9 | 1.0 | 65.0 | 71.2 | 77.2 |
 | 4 | turabusmani | 80.6 | 49.1 | 73.6 | 1.1 | 64.5 | 70.0 | 75.1 |
 
-**Strict, 11 ranked submissions**
+Strict, 11 ranked submissions:
 
 | # | team | QWK | Acc | Acc±1 | Dist | Acc7 | Acc5 | Acc3 |
 |---|---|---|---|---|---|---|---|---|
@@ -77,15 +77,15 @@ Submission ids and timestamps: Open thylinao id 875866 at 2026-08-03T10:13:41Z; 
 thylinao id 875864 at 2026-08-03T10:12:22Z; Strict zaher-m id 875092 at
 2026-08-02T21:03:17Z.
 
-**CORRECTED 2026-08-12: the Strict tie was NOT lost on the earlier timestamp.** That
-reading was an assumption, and it is wrong. It appears in `main.tex:288-289` ("taking
-first on the earlier timestamp") and in the Experimental Setup mechanic ("ties break
-against the later submission"), so **both need fixing in the camera-ready**.
+Corrected 2026-08-12: the Strict tie was NOT lost on the earlier timestamp. That reading
+was an assumption, and it is wrong. It appears in `main.tex:288-289` ("taking first on
+the earlier timestamp") and in the Experimental Setup mechanic ("ties break against the
+later submission"), so both need fixing in the camera-ready.
 
 Re-pulled from the leaderboard API. Primary scores are stored as already-rounded strings
 (`"85.4"`, `"86.3"`, `precision: 2`), so there is no hidden precision doing the ordering.
-Every tie group instead orders by the **secondary metric, exact accuracy, descending**,
-while submission times are scrambled within the group:
+Every tie group instead orders by the secondary metric, exact accuracy, descending, while
+submission times are scrambled within the group:
 
 | phase | tied QWK | order as displayed (owner, accuracy, submitted) |
 |---|---|---|
@@ -132,22 +132,22 @@ Four seats are the public-checkpoint champion (wordCE, camelbert, qarib, reg_myd
 nine are seed-averaged families of our own fine-tunes; one is a single run
 (xlmrL-reg-raw-s42). Four of the fourteen are the train+test retrained variants (`-tt`).
 
-`fleet14tt4` differs from the previous incumbent `fleet14` on **811 of 8,077 rows
-(10.0%)** — measured, not quoted.
+`fleet14tt4` differs from the previous incumbent `fleet14` on 811 of 8,077 rows (10.0%).
+That count came from diffing the two prediction files, not from an earlier note.
 
 ## D. Fine-tuning fleet, counted from disk
 
-- `scripts/cluster/fleet_manifest.tsv`: **112 rows** (the dispatched grid definition).
-- `artifacts/fleet/runs/`: 133 directories; **113** carry a `DONE` marker together with
-  both `*_validation.npy` and `*_test.npy`. Those 113 are the completed runs.
-- Backbones in the manifest: **13** distinct (`aubmindlab/bert-base-arabertv02`,
+- `scripts/cluster/fleet_manifest.tsv`: 112 rows (the dispatched grid definition).
+- `artifacts/fleet/runs/`: 133 directories; 113 carry a `DONE` marker together with both
+  `*_validation.npy` and `*_test.npy`. Those 113 are the completed runs.
+- Backbones in the manifest: 13 distinct (`aubmindlab/bert-base-arabertv02`,
   `bert-base-arabertv2`, `bert-large-arabertv02`, `bert-large-arabertv2`,
   `araelectra-base-discriminator`; `CAMeL-Lab/bert-base-arabic-camelbert-msa`, `-ca`;
   `UBC-NLP/MARBERTv2`, `ARBERTv2`; `ahmedabdelali/bert-base-qarib`,
   `bert-base-qarib60_1970k`; `FacebookAI/xlm-roberta-large`; `microsoft/mdeberta-v3-base`).
-- Loss families in the manifest: **6** — ce 45, reg 44, softqwk 10, focal 6, corn 5, soft 2.
+- Loss families in the manifest: 6 (ce 45, reg 44, softqwk 10, focal 6, corn 5, soft 2).
 - Blendable member pool (a member counts only if it has a matched validation and blind
-  score array): **172**, of which **26** are seed-averaged families and 146 single runs.
+  score array): 172, of which 26 are seed-averaged families and 146 single runs.
 - No model weights are tracked in git (checked: zero `.safetensors` / `pytorch_model` files).
 
 ## E. Hugging Face identifiers, all VERIFIED via the public API
@@ -168,19 +168,19 @@ collections. Cite them by repo id, not via that collection.
 
 ## F. Unconfirmable, with the fallback used
 
-- **Calibration point f = 0.40 (recorded as board 84.5).** `HANDOFF.md:306` marks this
-  reading as coming from an ambiguous screenshot. The Codabench submissions API needs
-  authentication (an unauthenticated request returns the SPA shell, not JSON), so it could
-  not be re-checked. **Fallback: drop the 0.40 row.** Report the four confirmed points
-  (0.00 → 84.1, 0.50 → 84.5, 0.60 → 84.4, 1.00 → 84.0) and describe the peak as flat
-  between 0.5 and 0.6 rather than across 0.4 to 0.6.
-- **Ledger rows 1 and 4: which track.** Not recoverable without the authenticated "My
-  Submissions" pages. **Fallback: mark the track as not recorded** in the appendix ledger
-  rather than guessing.
-- **Solo per-member test QWK.** `STATE.md:83-84` and `HANDOFF.md:319-330` disagree for the
-  same members (arabertv02-word-CE 85.24 vs 84.52, and three others). The protocols behind
-  the two tables were not reconstructed. **Fallback: the table is cut.** The paper does not
+- Calibration point f = 0.40 (recorded as board 84.5). The only record of this reading is
+  an ambiguous screenshot. The Codabench submissions API needs authentication (an
+  unauthenticated request returns the SPA shell, not JSON), so it could not be re-checked.
+  Fallback: drop the 0.40 row. Report the four confirmed points (0.00 → 84.1,
+  0.50 → 84.5, 0.60 → 84.4, 1.00 → 84.0) and describe the peak as flat between 0.5 and
+  0.6 rather than across 0.4 to 0.6.
+- Ledger rows 1 and 4, which track each belongs to. Not recoverable without the
+  authenticated "My Submissions" pages. Fallback: mark the track as not recorded in the
+  appendix ledger rather than guessing.
+- Solo per-member test QWK. Two earlier tables in the run log disagree for the same
+  members (arabertv02-word-CE 85.24 vs 84.52, and three others). The protocols behind the
+  two tables were not reconstructed. Fallback: the table is cut. The paper does not
   depend on it, and quoting either without knowing which protocol produced it would be
   guessing.
-- **Number of registered teams in 2026.** Not published. The paper reports ranked
+- Number of registered teams in 2026. Not published. The paper reports ranked
   submissions per track (4 Open, 11 Strict), which is what the board shows.

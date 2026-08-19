@@ -1,4 +1,4 @@
-"""Phase 2 - inference over the public CAMeL-Lab readability checkpoints.
+"""Phase 2: inference over the public CAMeL-Lab readability checkpoints.
 
 ONE model at a time on the 8GB M2: load, run forward passes (max_len 128,
 torch.no_grad, CPU, threads capped), decode to a continuous per-row score in

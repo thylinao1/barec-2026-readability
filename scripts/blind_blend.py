@@ -7,12 +7,12 @@ val, and the raw-train-prior half-match calibration at frac=0.50.
 
 REGRESSION GATE (`--gate`): rebuilds the champion from its three members at equal weight and
 asserts byte-identity with BLIND_halfmatch.zip. Verified PASS 2026-07-25. Run it after any edit
-to this file -- if it fails, the code path has drifted and nothing staged here is trustworthy.
+to this file. If it fails, the code path has drifted and nothing staged here is trustworthy.
 
-MEMBER NOTE -- why `reg_myd3` exists and `reg_gold` must never be used for blind:
-our locally computed D3Tok matches the license-gated LDC gold at only ~76%. HANDOFF 4d
+MEMBER NOTE, on why `reg_myd3` exists and `reg_gold` must never be used for blind:
+our locally computed D3Tok matches the license-gated LDC gold at only ~76%. Run log 4d
 concluded the D3Tok members were therefore unusable on blind, but that test standardized the
-member with GOLD-D3Tok val scores while applying it to MY-D3Tok blind scores -- two different
+member with GOLD-D3Tok val scores while applying it to MY-D3Tok blind scores, two different
 preprocessing regimes, which z-scoring cannot reconcile. Pairing my-D3Tok val scores
 (`blind/reg_valmyd3.npy`) with my-D3Tok blind scores makes the member self-consistent.
 Measured honest val nested-OOF, mean over n_candidates in (200,300,400), 2026-07-25:
@@ -89,7 +89,7 @@ def weighted(members, weights, which):
 
 
 def doc_shrink(scores, docs, alpha):
-    """score := (1-a)*score + a*document_mean(score). Fragile: HANDOFF 4c measured the test
+    """score := (1-a)*score + a*document_mean(score). Fragile: run log 4c measured the test
     peak at a=0.1 and a collapse to 82.15 by a=0.5. Blind has 212 docs, median 40 sentences."""
     if not alpha:
         return scores
@@ -153,7 +153,7 @@ def main():
     sb = weighted(members, weights, "blind")
     if a.alpha:
         # Shrink BOTH sides. The rounder's cutpoints live in val-score space, so shrinking only
-        # blind would narrow the blind distribution while leaving the cutpoints wide -- a
+        # blind would narrow the blind distribution while leaving the cutpoints wide, a
         # different transform from the one measured offline (+0.22 on test, which shrank both).
         sb = doc_shrink(sb, blind["Document"].to_list(), a.alpha)
         if not a.no_shrink_val:
@@ -195,7 +195,7 @@ def main():
     champ = champion_predictions()
     mine = dict(zip(bids, pred.tolist()))
     if set(champ) != set(bids):
-        sys.exit("!! champion ID set differs from blind IDs -- investigate before uploading")
+        sys.exit("!! champion ID set differs from blind IDs; investigate before uploading")
     diff = [i for i in bids if champ[i] != mine[i]]
 
     if a.gate:
@@ -218,7 +218,7 @@ def main():
     print(f"copied to    {dest}")
     print("\nUPLOAD TO THE OPEN TRACK (16544) FIRST. It reads the same blind gold and we lead it\n"
           "by 3.3 QWK, so a probe there is free. Promote to STRICT (16545) ONLY if the live Open\n"
-          "score STRICTLY exceeds 84.5 -- our Strict 84.5 is timestamped 07-24 07:38, ahead of\n"
+          "score STRICTLY exceeds 84.5. Our Strict 84.5 is timestamped 07-24 07:38, ahead of\n"
           "the tied entry's 13:35, and any new Strict upload resets that timestamp and forfeits the tie.")
 
 

@@ -5,7 +5,7 @@ Per token: lexicon hit -> majority gold d3tok; miss -> the old pipeline's
 d3tok for that token (aligned via segment grouping); alignment failure ->
 lexicon-or-identity for the whole sentence (counted).
 
-Variant B additionally routes AMBIGUOUS lexicon types (>1 observed d3tok)
+Variant B also routes AMBIGUOUS lexicon types (>1 observed d3tok)
 to the old pipeline.
 
   build_lex                       -> /tmp/d3tok_lex_traintest.json (full counts)

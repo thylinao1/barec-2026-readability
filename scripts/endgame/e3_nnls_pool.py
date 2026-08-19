@@ -125,7 +125,8 @@ report("nnls_restricted", support, (h_m, h_s), orc3, w3_full)
 results["nnls_restricted"] = dict(honest=(h_m, h_s), oracle=orc3,
                                   members=support, w=norm1(w3_full).tolist())
 
-out = "out"
+out = C.ROOT / "artifacts" / "endgame" / "e3_results.json"
+out.parent.mkdir(parents=True, exist_ok=True)
 with open(out, "w") as f:
     json.dump(dict(pool=pool, results=results), f, indent=1)
 log(f"saved {out}")

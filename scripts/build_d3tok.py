@@ -1,4 +1,4 @@
-"""Phase 2 prep - build the D3Tok column for the 2026 splits by joining to the
+"""Phase 2 prep: build the D3Tok column for the 2026 splits by joining to the
 gold D3Tok shipped in CAMeL-Lab/BAREC-Corpus-v1.0.
 
 Why: the d3tok checkpoints expect D3Tok input, and the corpus was preprocessed
@@ -49,7 +49,7 @@ def load_corpus() -> pl.DataFrame:
 
 
 def _norm(col: str) -> pl.Expr:
-    # collapse whitespace for a robust text join
+    # collapse whitespace so the join is not broken by spacing differences
     return pl.col(col).cast(pl.Utf8).str.replace_all(r"\s+", " ").str.strip_chars()
 
 

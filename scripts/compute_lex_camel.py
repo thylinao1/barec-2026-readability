@@ -1,7 +1,7 @@
 """Compute Lex and D3Lex exactly per ref/barec_analyzer/scripts/preprocess.py
 (run in the camel venv). Replicates preprocess.py lines 57-73 VERBATIM, including
 the loop that leaves d3lex_word holding its previous value when no segment
-qualifies -- that is what built the corpus columns, so parity requires it.
+qualifies. That is what built the corpus columns, so parity requires it.
 Usage: python compute_lex_camel.py <in_sent.csv> <out.csv>
 out CSV has ID,Lex,D3Lex."""
 import csv

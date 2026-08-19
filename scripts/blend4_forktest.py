@@ -1,4 +1,4 @@
-"""Resolve WHICH standardization protocol produced the HANDOFF 4b/4c table.
+"""Resolve WHICH standardization protocol produced the run log 4b/4c table.
 
 blend4_validate.py reproduced corr(marbert, blend) = 0.9450 exactly (so member loading is
 right) but got wordonly3 = 85.28 vs the documented 85.07, and "+marbert equal" = 85.28 vs the
@@ -84,13 +84,13 @@ def main():
         return official_qwk(yte, apply_cutpoints(st, r.cutpoints_)) * 100
 
     print("=" * 78)
-    print("SOLO test QWK          handoff: wordCE 84.52 camelbert 83.34 qarib8 82.66 marbert 81.96")
+    print("SOLO test QWK          run log: wordCE 84.52 camelbert 83.34 qarib8 82.66 marbert 81.96")
     print(f"{'member':12s}{'SELF':>10s}{'VAL':>10s}")
     for m in STEMS:
         print(f"{m:12s}{ev('SELF', {m: 1.0}):10.2f}{ev('VAL', {m: 1.0}):10.2f}")
 
     print("\n" + "=" * 78)
-    print("BLENDS                       handoff SELF? VAL?")
+    print("BLENDS                       run log SELF? VAL?")
     rows = [("wordonly3 equal      [85.07]", WORD3, 0.0),
             ("+marbert equal       [85.48]", ALL4, 0.0),
             ("+marbert tuned       [85.59]", TUNED, 0.0),

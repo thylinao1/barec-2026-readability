@@ -1,0 +1,28 @@
+cff-version: 1.2.0
+message: "If you use this software, please cite it as below."
+type: software
+title: "barec-2026-readability: equal-weight ensembling for sentence-level Arabic readability"
+abstract: >-
+  Code and public-split artifacts for team thylinao at the BAREC 2026 Shared Task on
+  sentence-level Arabic readability assessment. A fourteen-member equal-weight ensemble of
+  Arabic encoder fine-tunes, decoded to the 19-level BAREC scale by 18 tuned cutpoints. 85.4
+  QWK, second place on both sentence-level tracks.
+authors:
+  - family-names: Silchenko
+    given-names: Maksim
+repository-code: https://github.com/thylinao1/barec-2026-readability
+license: "MIT"
+date-released: 2026-08-19
+keywords:
+  - "Arabic NLP"
+  - "readability assessment"
+  - "shared task"
+  - "ensembling"
+references:
+  - type: unpublished
+    title: "thylinao at BAREC Shared Task 2026: Ensembling at the Noise Floor"
+    authors:
+      - family-names: Silchenko
+        given-names: Maksim
+    year: 2026
+    notes: "Under review for ArabicNLP 2026, co-located with EMNLP 2026."

@@ -3,8 +3,8 @@
 The half-match trick that scored 84.5 quantile-matched blind scores to the RAW train label
 distribution. But blind's composition differs sharply from train (STEM 6.9%->17.8%,
 Specialized 26.9%->44.7%), so the raw train prior is the wrong target. This reweights the
-prior by blind's known Domain x Text_Class mix -- label-free, uses only metadata shipped
-with the blind set -- then applies the same ~50% interpolation with the val-tuned rounder.
+prior by blind's known Domain x Text_Class mix (label-free, using only metadata shipped
+with the blind set), then applies the same ~50% interpolation with the val-tuned rounder.
     PYTHONWARNINGS=ignore ~/mac-ml-setup/.venv/bin/python -u scripts/blind_reweighted_prior.py
 """
 import sys

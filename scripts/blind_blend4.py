@@ -1,13 +1,13 @@
 """Stage the 4-member blind submission (wordCE + camelbert + qarib8 + MARBERTv2).
 
-Extends the 84.5 champion by ONE variable: a fourth member. Everything else -- per-split
+Extends the 84.5 champion by ONE variable: a fourth member. Everything else (per-split
 self-standardization, OptimizedRounder(n_candidates=300) fit on val, and the raw-train-prior
-half-match calibration -- is copied verbatim from scripts/blind_reweighted_prior.py, whose
+half-match calibration) is copied verbatim from scripts/blind_reweighted_prior.py, whose
 `raw50_reference` output was verified byte-identical to ~/Desktop/BLIND_halfmatch.zip.
 
 REGRESSION GATE: run with `--gate` and the script rebuilds the champion by setting the marbert
 weight to 0. The result must be byte-identical to BLIND_halfmatch.zip. If it is not, the code
-path has drifted and NOTHING produced here can be trusted -- stop and fix it.
+path has drifted and NOTHING produced here can be trusted. Stop and fix it.
 
 Calibration is EXHAUSTED as a lever (board evidence: 0% 84.1 | 50% 84.5 | 60% 84.4 | 100% 84.0
 | 50% reweighted-prior 83.9). Do not sweep `--frac` looking for gains; 0.50 is the optimum.
@@ -58,12 +58,12 @@ def z(a):
 
 def weighted(paths, weights):
     """sum(w_i * z(x_i)) / sum(w). With w=(1,1,1,0) this is bit-identical to the
-    champion's sum(z(x_i))/3 -- adding 0.0*z is an exact no-op in IEEE754."""
+    champion's sum(z(x_i))/3, because adding 0.0*z is an exact no-op in IEEE754."""
     return sum(weights[m] * z(np.load(paths[m])) for m in weights) / sum(weights.values())
 
 
 def doc_shrink(scores, docs, alpha):
-    """score := (1-a)*score + a*document_mean(score). Real but fragile: HANDOFF 4c measured
+    """score := (1-a)*score + a*document_mean(score). Real but fragile: run log 4c measured
     the test-set peak at a=0.1 and a collapse to 82.15 by a=0.5. Never exceed 0.2."""
     if not alpha:
         return scores
@@ -146,7 +146,7 @@ def main():
 
     champ = champion_predictions()
     if set(champ) != set(bids):
-        print("!! champion ID set differs from blind IDs -- investigate")
+        print("!! champion ID set differs from blind IDs; investigate")
     diff = [i for i in bids if champ[i] != pred[list(bids).index(i)]] if a.gate else None
 
     if a.gate:
@@ -159,7 +159,7 @@ def main():
         else:
             n = sum(champ[i] != mine[i] for i in bids)
             print(f"GATE FAIL: {n}/{len(bids)} predictions differ from the champion. "
-                  "The code path has DRIFTED -- do not stage anything until this is fixed.")
+                  "The code path has DRIFTED. Do not stage anything until this is fixed.")
             sys.exit(1)
         return
 
@@ -176,7 +176,7 @@ def main():
     dest = Path.home() / "Desktop" / f"BLIND_{a.tag}.zip"
     shutil.copy(zpath, dest)
     print(f"\ncopied to     {dest}")
-    print("Upload to the OPEN track (16544) FIRST -- it has a 3.3 QWK cushion and reads the "
+    print("Upload to the OPEN track (16544) FIRST: it has a 3.3 QWK cushion and reads the "
           "same blind gold, so it is a free oracle. Only promote to STRICT (16545) if the "
           "live Open score STRICTLY exceeds 84.5.")
 

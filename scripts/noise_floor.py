@@ -3,14 +3,14 @@
 Motivation: blend4_forktest.py showed the SAME blend on the SAME data moving 85.44 -> 85.28 ->
 85.42 as the rounder grid went 200 -> 300 -> 400 candidates, and the marbert weight sweep was
 non-monotonic (w=0.10 -> 85.285 but w=0.15 -> 85.706). If the procedure's own noise is ~0.15
-QWK then every gain claimed in HANDOFF section 4b (+0.41 marbert, +0.11 tuned weights, +0.22
+QWK then every gain claimed in run log section 4b (+0.41 marbert, +0.11 tuned weights, +0.22
 doc-shrinkage) is at or below the noise floor and cannot be trusted as a real effect.
 
 Three independent estimates of the noise, and one of the honest effect size:
-  A) rounder grid resolution   -- vary n_candidates, everything else fixed
-  B) test-set sampling noise   -- bootstrap the test rows with cutpoints FROZEN, so this
-                                  isolates evaluation noise from tuning noise
-  C) fold-seed noise           -- vary the val fold seed in the honest nested-OOF protocol
+  A) rounder grid resolution:  vary n_candidates, everything else fixed
+  B) test-set sampling noise:  bootstrap the test rows with cutpoints FROZEN, so this
+                               isolates evaluation noise from tuning noise
+  C) fold-seed noise:          vary the val fold seed in the honest nested-OOF protocol
   D) paired bootstrap on the DELTA (all4_tuned - wordonly3), which is the number that
      actually decides whether to spend a submission
 
@@ -59,7 +59,7 @@ def main():
         return OptimizedRounder(n_candidates=n_cand).fit(blend(zv, w), yva).cutpoints_
 
     print("=" * 76)
-    print("A) ROUNDER GRID NOISE -- identical data, only n_candidates changes")
+    print("A) ROUNDER GRID NOISE: identical data, only n_candidates changes")
     for label, w in (("wordonly3", WORD3), ("all4 tuned", TUNED)):
         qs = []
         for n in (150, 200, 250, 300, 350, 400, 450, 500):
@@ -71,7 +71,7 @@ def main():
               f"range {qs.max()-qs.min():.3f}")
 
     print("\n" + "=" * 76)
-    print("B) TEST-SAMPLING NOISE -- cutpoints FROZEN (n_cand=300), bootstrap test rows")
+    print("B) TEST-SAMPLING NOISE: cutpoints FROZEN (n_cand=300), bootstrap test rows")
     cuts3, cuts4 = fit_cuts(WORD3, 300), fit_cuts(TUNED, 300)
     p3 = apply_cutpoints(blend(zt, WORD3), cuts3)
     p4 = apply_cutpoints(blend(zt, TUNED), cuts4)
@@ -94,7 +94,7 @@ def main():
     print(f"   point estimate {p4.mean()*0 + (official_qwk(yte,p4)-official_qwk(yte,p3))*100:+.3f}")
     print(f"   bootstrap mean {d.mean():+.3f}  sd {d.std():.3f}  95% CI [{lo:+.3f}, {hi:+.3f}]")
     print(f"   P(delta > 0) = {(d > 0).mean()*100:.1f}%")
-    print(f"   VERDICT: {'CI excludes 0 -- real effect' if lo > 0 else 'CI includes 0 -- NOT distinguishable from noise'}")
+    print(f"   VERDICT: {'CI excludes 0, real effect' if lo > 0 else 'CI includes 0, NOT distinguishable from noise'}")
 
     print("\n" + "=" * 76)
     print("C) FOLD-SEED NOISE in the honest val nested-OOF, and the honest marbert effect")

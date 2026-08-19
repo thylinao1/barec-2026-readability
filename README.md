@@ -1,51 +1,47 @@
-# thylinao at BAREC Shared Task 2026: Ensembling at the Noise Floor
+# barec-2026-readability
 
-Code and public-split artifacts for team **thylinao**'s entry to the
+Code and public-split artifacts for team thylinao's entry to the
 [BAREC 2026 Shared Task](https://barec.camel-lab.com/sharedtask2026) on sentence-level
-Arabic readability assessment (ArabicNLP 2026, co-located with EMNLP 2026).
+Arabic readability assessment (ArabicNLP 2026, co-located with EMNLP 2026). The system is a
+fourteen-member equal-weight ensemble of Arabic encoder fine-tunes, decoded from a
+continuous score to the 19-level BAREC scale by 18 tuned cutpoints.
 
-**Result: 85.4 QWK, second place on both the Open and the Strict sentence-level tracks.**
+One prediction file was submitted to both sentence-level tracks. It scored 85.4 QWK and
+placed 2nd on both.
 
-| track | rank | QWK | Acc | Acc±1 | Dist | Acc7 | Acc5 | Acc3 |
-|---|---|---|---|---|---|---|---|---|
-| Open (4 ranked) | 2 | 85.4 | 37.8 | 71.3 | 1.1 | 60.1 | 67.1 | 74.8 |
-| Strict (11 ranked) | 2 | 85.4 | 37.8 | 71.3 | 1.1 | 60.1 | 67.1 | 74.8 |
+## Install
 
-The same file was submitted to both tracks. On Strict the first-place entry also scored
-85.4 and placed first on exact accuracy, 38.7 against our 37.8.
+Python 3.12, which is what the cluster venv uses. The blending and analysis scripts need
+only:
 
-## What is interesting here
-
-The system is an ordinary equal-weight ensemble. The paper is about how its choices were
-measured, and that is what this repository is organised around.
-
-- **`scripts/noise_floor.py`** measures the noise floor of the offline evaluation three
-  independent ways: threshold-grid resolution (sd 0.094), test-set bootstrap (sd 0.44), and
-  fold-seed reshuffling (which returns bit-identical results and is therefore a trap, not a
-  noise estimate). It also runs the paired bootstrap that shrinks a naive +0.52 gain to
-  +0.24 with a 95% interval of [+0.03, +0.45].
-- **`harness/metrics.py`** reproduces the official scorer string-for-string on the provided
-  development fixture, including all six secondary metrics. Two entry points: `official_qwk`
-  mirrors `eval.py` exactly; `fold_qwk` pins the label set to [1,19] so a fold with a sparse
-  tail cannot silently build a smaller confusion matrix.
-- **`harness/rounder.py`** is the 18-cutpoint monotone coordinate-ascent rounder, plus
-  `nested_oof_qwk`, the out-of-fold-of-out-of-fold protocol used as the go/no-go number.
-- **`scripts/blind_blend.py`** is the blender that produced every submission, including the
-  half-match cutpoint calibration described in Section 3.3 of the paper.
-- **`scripts/endgame/`** holds the two instruments used on the final day: an honest
-  validation nested-OOF estimator and a deployment-mirrored test oracle, plus the
-  aggregation experiments (fitted weights, coordinate ascent, isotonic calibration, robust
-  aggregators) that all lost to plain equal weight.
-
-## The final system
-
-Fourteen members, equal weight, z-standardised per split, half-match calibration at
-`f = 0.50`. With the member blind score arrays in place, the committed blender rebuilds the
-submitted file byte for byte:
-
+```bash
+pip install numpy polars scikit-learn scipy
 ```
-sha256(prediction) = e243ab46a0edb09e1361e8bcb52159708e2f22bb4d90063c5206932db0bf2516
+
+Training and inference additionally need `torch` and `transformers` (plus `peft` and
+`pandas` for the LoRA scripts under `scripts/`). The morphological preprocessing in
+`scripts/compute_word_camel.py`, `compute_lex_camel.py` and `compute_d3tok_camel.py` needs
+`camel-tools`. Those three are written to run in a separate camel-tools virtualenv, as
+their docstrings say.
+
+The corpus is not in this repository. Download the shared task splits from Hugging Face
+(`CAMeL-Lab/BAREC-Shared-Task-2026-sent`, not gated) and place the three parquet files at
+`data/raw/barec-2026-sent/data/{train,validation,test}-00000-of-00001.parquet`, which is
+where `harness/data.py` looks for them.
+
+## Run
+
+Harness tests:
+
+```bash
+python -m pytest tests
 ```
+
+`tests/test_cv.py` needs the 2026 train parquet. `tests/test_qwk_parity.py` additionally
+needs the 2025 dev gold and the organisers' 2025 example prediction fixture under `ref/`.
+It is the byte-parity gate against the official `eval.py`, and it fails without them.
+
+The blend that produced the submitted file:
 
 ```bash
 python scripts/blind_blend.py --tag fleet14tt4 --members \
@@ -55,48 +51,105 @@ avg-qarib-ce-raw,avg-alarge02-reg-word-tt,avg-araelectra-reg-word,\
 avg-camelbert-reg-word,avg-marbert-ce-raw-tt,avg-arabertv2-ce-d3tok,xlmrL-reg-raw-s42
 ```
 
-Four seats are public checkpoints, nine are seed-averaged families of our own fine-tunes,
-one is a single run. Four seats use variants retrained on train plus the corpus's publicly
-released gold test split; the paper's appendix states this disclosure in full.
-
-## Layout
+With the member score arrays over the blind set in place, that command rebuilds the
+submitted file byte for byte:
 
 ```
-harness/          metrics, fold map, rounder, data loading, submission writing
-scripts/          preprocessing, training, blending, analysis
-  cluster/        Slurm job array and the 112-row fine-tuning grid
-  endgame/        final-day instruments and aggregation experiments
-artifacts/fleet/  per-run validation and test score arrays (public splits only)
-paper/            the LaTeX source and a first-hand verification log
-tests/            harness tests, including the byte-parity gate
+sha256(prediction) = e243ab46a0edb09e1361e8bcb52159708e2f22bb4d90063c5206932db0bf2516
 ```
 
-## Reproducing
+Those blind arrays are not published (see "What is not published" below), so the command
+needs them regenerated first. The analysis that runs off the committed validation and test
+arrays plus the 2026 data does not: `scripts/fleet_rank.py` ranks members and proposes
+blends, `scripts/noise_floor.py` reproduces the noise measurements, and
+`scripts/endgame/e1_fitted_weights.py` through `e5_robust_agg.py` rerun the aggregation
+experiments.
 
-Requires the BAREC 2026 shared task data from Hugging Face
-(`CAMeL-Lab/BAREC-Shared-Task-2026-sent`, not gated) and CAMeL Tools for the morphological
-views. The `Word` and `D3Tok` pipelines are in `scripts/compute_word_camel.py` and
-`scripts/compute_d3tok_camel.py`. Note that our locally computed D3Tok matches the released
-gold column at about 76% because the released column used a license-gated morphological
-database; the paper explains why that mattered less than the standardisation bug it masked.
+## Method
 
-Fine-tuning used a Slurm cluster with A100 GPUs (`scripts/cluster/`). The 113 completed runs
-produced the score arrays in `artifacts/fleet/runs/`, so the blending and analysis can be
-rerun without retraining anything.
+The final system averages fourteen member scores at equal weight. Each member's validation
+and blind scores are z-standardised within their own split before averaging, then 18
+monotone cutpoints map the averaged score to a level in 1..19. The cutpoints are the
+midpoint between thresholds fitted on validation and thresholds chosen to match the blind
+score distribution to the training label prior, at `f = 0.50`. Four seats are public
+CAMeL-Lab checkpoints, nine are seed-averaged families of our own fine-tunes and one is a
+single run; four seats use variants retrained on train plus the corpus's publicly released
+gold test split, which the paper's appendix discloses in full.
 
-## What is deliberately not here
+The members came from a Slurm fine-tuning grid on A100 GPUs (`scripts/cluster/`). The
+manifest defines 112 runs; `artifacts/fleet/runs/` holds 133 directories, 113 of which carry
+a `DONE` marker together with both score arrays. Combined with public checkpoints that gave
+a pool of 172 blendable candidates over 13 backbones and 6 loss families.
 
-**Predictions on the blind test set are not published.** The blind set is released only to
-registered participants, and it may be reused in a future edition of the shared task; a
-strong prediction file over it would be a pseudo-label source for later participants.
-Member score arrays computed over the blind set are withheld for the same reason, which is
-why the rebuild command above needs them regenerated first. The code regenerates both from
-the blind input for anyone who holds it, and the sha256 above lets the organisers verify
-the submitted file exactly. Internal campaign notes are also not included.
+Most of the work went into measuring rather than modelling, because the offline evaluation
+turned out to be too coarse to rank the changes we were making. `scripts/noise_floor.py`
+estimates that noise three independent ways: varying the resolution of the threshold search
+grid moves the same blend on the same data by sd 0.094 QWK, bootstrapping the test rows with
+the cutpoints frozen gives sd 0.44, and reshuffling the fold seed returns bit-identical
+numbers, which makes fold-seed stability a trap rather than a noise estimate. The same
+script runs the paired bootstrap that shrinks a naive +0.52 gain to +0.24 with a 95%
+interval of [+0.03, +0.45].
+
+Two pieces of the harness exist because of that. `harness/metrics.py` has two QWK entry
+points: `official_qwk` mirrors the organisers' `eval.py` exactly, and `fold_qwk` pins the
+label set to 1..19 so a fold with a sparse tail cannot silently build a smaller confusion
+matrix and return a number the official scorer would not. `harness/rounder.py` provides
+`nested_oof_qwk`, which fits each fold's cutpoints on the other folds' out-of-fold scores,
+so the reported QWK is never measured on the rows the thresholds were tuned on.
+
+The fitted alternatives all lost. `scripts/endgame/` holds them: non-negative least squares
+weights, direct-QWK coordinate ascent, an expanded member pool, per-member isotonic
+calibration, and median, trimmed-mean and rank-mean aggregation. Every configuration scored
+below plain equal weight on the honest nested out-of-fold number.
+
+One preprocessing caveat matters before rerunning anything. Our locally computed
+D3Tok matches the corpus's released gold D3Tok column on about 76% of sentences, because the
+released column was produced with a license-gated morphological database. That mismatch
+matters less than the standardisation bug it masked: a member standardised with gold-D3Tok
+validation scores and applied to locally computed blind scores is being z-scored across two
+different preprocessing regimes, which is what `scripts/blind_myd3_members.py` was written to
+untangle.
+
+## Repository layout
+
+| path | contents |
+|---|---|
+| `harness/` | metrics, document-grouped fold map, cutpoint rounder, data loading, submission writing |
+| `scripts/` | preprocessing, training, blending and analysis |
+| `scripts/cluster/` | Slurm job array and the 112-row fine-tuning grid |
+| `scripts/endgame/` | final-day instruments and the aggregation experiments |
+| `notebooks/` | the Kaggle T4 fine-tuning recipe and its setup notes |
+| `artifacts/fleet/runs/` | per-run validation and test score arrays, public splits only |
+| `artifacts/folds_2026_train.json` | the committed document-to-fold map |
+| `paper/` | LaTeX source of the system description paper and a verification log |
+| `tests/` | harness tests, including the byte-parity gate against `eval.py` |
+
+## Results
+
+Final blind-test standings, pulled from the Codabench leaderboard API on 2026-08-04.
+
+| track | ranked submissions | our rank | QWK | Acc | Acc±1 | Dist | Acc7 | Acc5 | Acc3 |
+|---|---|---|---|---|---|---|---|---|---|
+| Open | 4 | 2 | 85.4 | 37.8 | 71.3 | 1.1 | 60.1 | 67.1 | 74.8 |
+| Strict | 11 | 2 | 85.4 | 37.8 | 71.3 | 1.1 | 60.1 | 67.1 | 74.8 |
+
+The first-place entry scored 85.5 on Open. On Strict it also scored 85.4 and took first on
+the tie-breaking secondary metric, exact accuracy, 38.7 against our 37.8. Full leaderboard
+tables and the checks behind them are in `paper/VERIFIED_FACTS.md`.
+
+## What is not published
+
+Predictions over the blind test set are not included. The blind set is released only to
+registered participants and may be reused in a future edition of the shared task, so a
+strong prediction file over it would be a pseudo-label source for later entrants. Member
+score arrays over the blind set are withheld for the same reason. The code regenerates both
+from the blind input for anyone who holds it, and the sha256 above lets the organisers
+verify the submitted file exactly.
 
 ## Citation
 
-The system description paper is in `paper/`. Please also cite the shared task overview:
+The system description paper is in `paper/`: "thylinao at BAREC Shared Task 2026: Ensembling
+at the Noise Floor". Please also cite the shared task overview:
 
 ```bibtex
 @inproceedings{elmadani-etal-2026-barec-shared-task,

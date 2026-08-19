@@ -15,7 +15,7 @@ Two outputs:
 Seed groups (same recipe, -s1..-s5) are pre-averaged into one synthetic member
 named avg-<recipe> (mean of z-scored member scores), the proven variance cut.
 
-NOTE the noise floor: offline deltas under ~0.3 are noise (HANDOFF 0d). This
+NOTE the noise floor: offline deltas under ~0.3 are noise (run log 0d). This
 script COARSELY ranks candidates for board probes; it does not pick winners.
 
     PYTHONWARNINGS=ignore ~/mac-ml-setup/.venv/bin/python -u scripts/fleet_rank.py \

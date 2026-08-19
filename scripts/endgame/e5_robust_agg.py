@@ -1,4 +1,4 @@
-"""e5: fitting-free robust aggregation over FLEET14 z-scores (row-wise).
+"""e5: fitting-free rank and order-statistic aggregation over FLEET14 z-scores (row-wise).
 
 Configs:
   (a) median

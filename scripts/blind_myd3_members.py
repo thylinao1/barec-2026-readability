@@ -1,13 +1,13 @@
 """Can the D3Tok members be REVIVED for blind by standardizing them consistently?
 
-HANDOFF 4d excluded arabertv2-d3tok-reg and -d3tok-CE from the blind blend because our locally
+Run log 4d excluded arabertv2-d3tok-reg and -d3tok-CE from the blind blend because our locally
 computed D3Tok only matches the license-gated LDC gold at ~76%, which dropped the `reg` member
 from 84.68 to 82.75 on blind.
 
 But that comparison mixed preprocessing regimes: the member was STANDARDIZED using val scores
 computed from GOLD D3Tok while being APPLIED to blind scores computed from MY D3Tok. The blend
 z-scores each member, so a systematic shift between the two regimes is exactly the kind of
-error that standardization is supposed to absorb -- and cannot, if the two arrays come from
+error that standardization is supposed to absorb, and cannot, if the two arrays come from
 different preprocessing.
 
 We already have the fix cached and unused: `blind/reg_valmyd3.npy` and `blind/dtCE_valmyd3.npy`
@@ -15,8 +15,8 @@ are the VAL scores under MY D3Tok. Pairing those with the my-D3Tok blind scores 
 member internally consistent, at zero new compute.
 
 Honest criterion: val nested-OOF (the rounder never scores rows it was tuned on). We CANNOT use
-test here -- no my-D3Tok test scores exist -- so val nested-OOF is the only honest number
-available, and the HANDOFF 4b figure of 85.85 for this direction is NOT comparable (it used
+test here (no my-D3Tok test scores exist), so val nested-OOF is the only honest number
+available, and the run log 4b figure of 85.85 for this direction is NOT comparable (it used
 gold D3Tok).
 
 Noise axis: n_candidates, NOT the fold seed. Measured 2026-07-25: two different fold seeds gave
@@ -52,7 +52,7 @@ VAL = {
     "marbert": S / "marbertv2-reg_validation.npy",
     "reg_myd3": B / "reg_valmyd3.npy",
     "dtCE_myd3": B / "dtCE_valmyd3.npy",
-    # gold-D3Tok versions, for contrast only -- NOT blind-safe
+    # gold-D3Tok versions, for contrast only; NOT blind-safe
     "reg_gold": S / "arabertv2-d3tok-reg_validation.npy",
     "dtCE_gold": S / "arabertv2-d3tok-CE_validation.npy",
 }

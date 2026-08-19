@@ -5,12 +5,12 @@ Per member (names as in fleet_manifest.tsv):
   2. GATE 1: config head shape matches the loss (reg->1, corn->18, else 19)
   3. GATE 2: local val inference on the SAME text regime the cluster trained on
      (raw Sentence / gold Word / gold D3Tok) must correlate > 0.99 with the
-     cluster's {name}_validation.npy -- proves the weights match the scores.
+     cluster's {name}_validation.npy. This proves the weights match the scores.
   4. Blend-side scores, one local code path (scoring convention identical to
      cluster_train.py: reg=logit, corn=1+sum cumprod sigmoid, else posterior mean):
        val:   raw/word -> gate scores reused (same regime as blend standardization)
               d3tok    -> RECOMPUTED on my-D3Tok val text (/tmp/val_d3tok_mine.csv),
-                          the proven reg_myd3 pattern (HANDOFF 0e)
+                          the proven reg_myd3 pattern (run log 0e)
        blind: raw -> Sentence | word -> /tmp/blind_word_mine.csv | d3tok ->
               /tmp/blind_d3tok_mine.csv
      Saved to artifacts/scores/fleet/{name}_val.npy + {name}_blind.npy for the blender.

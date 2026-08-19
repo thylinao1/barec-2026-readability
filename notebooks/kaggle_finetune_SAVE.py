@@ -1,7 +1,7 @@
 """MARBERTv2 fine-tune + CHECKPOINT EXPORT (paste this whole file into a fresh Kaggle notebook).
 
 Identical to kaggle_finetune.py except it also exports the trained weights to
-/kaggle/working/model, which the original never did -- that omission is why the fine-tuned
+/kaggle/working/model, which the original never did. That omission is why the fine-tuned
 MARBERTv2 could not be used to score the blind set.
 
 Kaggle setup: Accelerator = GPU T4 x2, Internet = On.

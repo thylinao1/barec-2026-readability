@@ -6,7 +6,7 @@ LABEL_i -> i+1), regression heads emit the raw logit. Outputs go to
 artifacts/scores/fleet/{name}_val.npy + {name}_blind.npy, where blind_blend.py
 auto-discovers them.
 
-Input regimes (self-consistency rule -- val and blind must share one regime):
+Input regimes. The self-consistency rule is that val and blind share one regime:
   raw   -> Sentence (val parquet / blind parquet)
   word  -> GOLD Word val (processed parquet) + my-Word blind (proven wordCE pattern)
   d3tok -> my-D3Tok val (/tmp/val_d3tok_mine.csv) + my-D3Tok blind (reg_myd3 pattern)
@@ -122,7 +122,7 @@ def main():
     # higher means the checkpoint saw validation rows in training (the v02_Sentence_CE
     # case measured 94.2). Such a member poisons the val-tuned rounder and blend
     # selection and MUST NOT be blended.
-    flag = "  !! CONTAMINATED-VAL — DO NOT BLEND" if naive > 86 else ""
+    flag = "  !! CONTAMINATED-VAL: DO NOT BLEND" if naive > 86 else ""
     print(f"  val:   n={len(sv)} mean={sv.mean():.3f} sd={sv.std():.3f} "
           f"naiveQWK={naive:.2f}{flag}")
     if naive > 86:

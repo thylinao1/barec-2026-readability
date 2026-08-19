@@ -105,7 +105,7 @@ def predict(model, texts, tok):
 
 def main():
     tr, va, te = read("train"), read("validation"), read("test")
-    local = fetch(BACKBONE)  # robust download (retries + resume), then load locally
+    local = fetch(BACKBONE)  # download with retries and resume, then load locally
     tok = AutoTokenizer.from_pretrained(local)
     model = AutoModelForSequenceClassification.from_pretrained(
         local, num_labels=1, problem_type="regression")

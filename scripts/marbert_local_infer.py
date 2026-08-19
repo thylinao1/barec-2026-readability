@@ -6,7 +6,7 @@ and one identical set of weights. Recomputing all three here removes any fp16/ke
 mismatch between Kaggle's GPU and this machine's MPS. The Kaggle .npy files are then used
 only as a cross-check (correlation should be ~1.0; a low value means the wrong checkpoint).
 
-Input text is RAW `Sentence` -- MARBERTv2/AraELECTRA were fine-tuned on raw text
+Input text is RAW `Sentence`, because MARBERTv2/AraELECTRA were fine-tuned on raw text
 (TEXT_COL="Sentence" in kaggle_finetune.py), so NO camel-tools preprocessing here. Do not
 "helpfully" add Word/D3Tok preprocessing: it would silently wreck the member.
 

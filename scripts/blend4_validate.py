@@ -1,10 +1,10 @@
 """Offline reproduction gate for the 4-member blend (runs on cached val/test .npy only).
 
 Purpose: prove the blend code path in this file is IDENTICAL in semantics to the one that
-produced HANDOFF section 4a/4b/4c, BEFORE the MARBERTv2 blind scores exist. If the numbers
+produced run log sections 4a/4b/4c, BEFORE the MARBERTv2 blind scores exist. If the numbers
 below reproduce, the same functions can be trusted to build the blind submission.
 
-Reproduction targets (HANDOFF 2026-07-25):
+Reproduction targets (run log, 2026-07-25):
   solo test QWK   wordCE 84.52 | camelbert 83.34 | qarib8 82.66 | marbert 81.96
   wordonly3 (equal)                      85.07
   + marbert (equal)                      85.48
@@ -39,7 +39,7 @@ TUNED = {"wordCE": 0.306, "camelbert": 0.231, "qarib8": 0.231, "marbert": 0.231}
 
 
 def z(a):
-    """Per-split self-standardization -- EXACTLY as in blind_distmatch.py."""
+    """Per-split self-standardization, EXACTLY as in blind_distmatch.py."""
     a = np.asarray(a).ravel().astype(float)
     return (a - a.mean()) / (a.std() or 1)
 

@@ -8,7 +8,7 @@ THE GUARD THAT MATTERS: the .npy files must come from the SAME run as the weight
 download turned out to be byte-identical to the cached July-14 scores, i.e. the OLD notebook's
 output, which never called save_pretrained. This script fails loudly on that case, because
 pairing new weights with old predictions would either trip the correlation gate for the wrong
-reason or -- worse -- silently mis-standardize the member.
+reason or (worse) silently mis-standardize the member.
 
     PYTHONWARNINGS=ignore ~/mac-ml-setup/.venv/bin/python -u scripts/land_marbert.py
     # add --run to chain straight into scoring val+test+blind
@@ -137,7 +137,7 @@ def main():
     stale = []
     for split, best in npys.items():
         if best is None:
-            print(f"  !! no marbertv2-reg_{split}.npy found -- the cross-check will be skipped")
+            print(f"  !! no marbertv2-reg_{split}.npy found, so the cross-check will be skipped")
             continue
         _, p, arr = best
         old = BACKUP / f"marbertv2-reg_{split}.npy"
@@ -152,7 +152,7 @@ def main():
         sys.exit(
             "\nGATE FAIL: those .npy files are the OLD notebook's output, not this run's.\n"
             "The weights you just installed came from a run that also wrote fresh\n"
-            "marbertv2-reg_validation.npy / _test.npy -- download THOSE two files from the same\n"
+            "marbertv2-reg_validation.npy / _test.npy: download THOSE two files from the same\n"
             "Output tab and re-run. (Override with --allow-stale-npy only if you are certain the\n"
             "weights and these predictions came from the same training run.)")
 
