@@ -60,9 +60,7 @@ which we believe is the part worth reusing.\footnote{Code, the fine-tuning grid 
 per-run score arrays: \url{https://github.com/thylinao1/barec-2026-readability}}
 
 The system is ordinary on purpose, and we report that plainness as a result: every fitted
-alternative we tried, from non-negative least squares weights to per-member isotonic
-calibration and robust aggregators, scored below plain equal weight
-(Section~\ref{sec:results}).
+alternative we tried scored below plain equal weight (Section~\ref{sec:results}).
 
 The first application of the rule came early. The public CAMeL-Lab readability checkpoints
 were fine-tuned on the BAREC corpus, which contains the shared task's training split, so
@@ -124,7 +122,8 @@ agreement, reproducing the official script string-for-string on the development 
 separate entry point pins the label set to $[1,19]$ for per-fold evaluation, where a sparse
 tail would otherwise silently build a smaller confusion matrix. The gate paid for itself in one
 upload: a submission whose local test QWK was 86.10 returned 86.10 on the development-phase
-board, all seven metrics matching, confirming that our grader is the board's grader.
+board, which scores that released test split, all seven metrics matching, confirming that our
+grader is the board's grader.
 
 Preprocessing parity is the same kind of concern. The blind set is new sentences, so the
 corpus's gold morphological views must be recomputed locally with
