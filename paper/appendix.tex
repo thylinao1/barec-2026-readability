@@ -197,11 +197,14 @@ seed-averaged families of \texttt{camelbert-ce-word},
 publication.\footnote{\url{https://huggingface.co/AymanTarig/qarib-barec-optimized-v8}}
 \end{sloppypar}
 
-Every one of the fourteen is trained on the BAREC training split alone. The four seats that
-were not, in the entry we first submitted, were replaced by their training-split-only
-counterparts from the same grid after the organisers ruled on them
-(Section~\ref{sec:correction}). The nine seed-averaged families and the single run each carry
-a per-run training configuration on disk, and none of them names any split other than train.
+Every seat we fine-tuned ourselves uses the BAREC training split alone. The four that did not,
+in the entry we first submitted, were replaced by their training-split-only counterparts from
+the same grid after the organisers ruled on them (Section~\ref{sec:correction}). The nine
+seed-averaged families and the single run each carry a per-run training configuration on disk,
+and none names any split other than train. The four public checkpoints were fine-tuned on
+BAREC by others: three are the corpus authors' own baselines, whose paper describes fitting on
+train and selecting on dev, and the fourth is a community checkpoint whose author documents no
+training data at all, which we report because we cannot verify it.
 
 \section{Harness detail}
 \label{app:harness}
