@@ -38,9 +38,9 @@ offline evaluation between 0.09 and 0.44 QWK, as large as the margins that decid
 ranking. In three paired comparisons against the live board, only the smallest of the three
 offline estimates survived; the other two reversed in sign. We therefore proved that the Open
 and Strict tracks score identical gold, and made every decision worth a submission from a live
-board reading. Once the board showed the mean was capped, every further candidate came back a
-tie at the board's resolution. The full ledger, including four refuted hypotheses and one
-withdrawn submission, is in the appendix.
+board reading. Once the board showed the mean was capped, every candidate we probed came back a
+tie, bar one that we later withdrew as outside the rules. The full ledger, including four
+refuted hypotheses, is in the appendix.
 \end{abstract}
 
 \section{Introduction}
@@ -66,8 +66,8 @@ The first application of the rule came early. The public CAMeL-Lab readability c
 were fine-tuned on the BAREC corpus, which contains the shared task's training split, so
 their training-split predictions are in-sample: solo QWK of 89 to 95 on train against 82 to
 84 on clean holdouts. Any blend weight or cutpoint tuned on train would have been tuned on
-memorised labels, so we retired train as a tuning surface and adopted
-tune-on-validation, evaluate-once-on-test.
+memorised labels, so we retired train as a tuning surface, tuned on validation, and kept test
+as a holdout we read rather than fitted.
 
 We contribute a noise-floor audit of offline evaluation on this task, with three independent
 estimators and three paired offline-versus-board tests on the true blind gold; a protocol for
@@ -242,7 +242,8 @@ shift between the tuning and target samples, which is what separated validation 
 
 Once the ensemble reached fourteen members it absorbed everything. Against an equal-weight
 baseline of 85.281 on honest nested out-of-fold, twenty fitted-aggregation configurations
-scored between 84.74 and 85.12: least-squares and ridge-shrunk weights, direct-QWK coordinate
+scored between 84.74 and 85.12: non-negative and ordinary least squares weights with
+ridge-shrunk and clipped variants, direct-QWK coordinate
 ascent, an expanded 44-member pool, per-member isotonic calibration, and median, trimmed-mean
 and rank-mean aggregation (Appendix~\ref{app:saturation}). Every one is below equal weight.
 Validation cannot support fourteen fitted parameters, and the row-wise extremes that robust
@@ -259,10 +260,11 @@ candidate to beat the baseline both on honest nested out-of-fold and on a deploy
 oracle over the released gold test split, called four staged candidates statistical ties; probed
 on the board they returned 85.2, 85.2, 85.2 and 85.3, four for four at the board's
 resolution. So we stopped ranking candidates by offline score and ranked them by
-disagreement with the incumbent. Five near-clones, differing on 2\% to 12\% of rows, drew
-ties as well. The board ran out of resolution before our pool ran out of candidates. The test
-leg never overturned validation: its one promoted candidate failed the validation leg, and the
-board agreed.
+disagreement with the incumbent. Five near-clones, differing on 2\% to 12\% of rows, drew ties.
+The one candidate that changed 10.0\% of predictions drew 85.4, the only reading above the
+incumbent in the campaign, and it is the entry we withdrew (Section~\ref{sec:correction}). The
+test leg of the gate never overturned validation: its one promoted candidate failed the
+validation leg, and the board agreed.
 
 \subsection{Final standing}
 
@@ -275,13 +277,14 @@ our pool could not reach by recombination, calibration or retraining.
 \label{sec:correction}
 
 The entry we first submitted had four of its fourteen seats fine-tuned on the training split
-plus the corpus's released gold test split. We disclosed this to the organisers
-and in this paper, having read it as permitted; after the phase closed they ruled otherwise and
-we withdrew it. Every number here is the same fourteen-seat ensemble with those four seats
+plus the corpus's released gold test split. We disclosed this to the organisers and in this
+paper, but we had read the rule wrongly: it says models are trained exclusively on the training
+set. The organisers told us so after the phase closed and the entry was withdrawn. Every number
+in this paper is the same fourteen-seat ensemble with those four seats
 replaced by their training-split-only counterparts from the same grid, an entry we also
-submitted during the testing phase and which the board scored at 85.3. What the withdrawn
-variant bought is measured in Appendix~\ref{app:saturation}: 0.008 offline and 0.1 on the
-board, inside every noise estimate in Section~\ref{sec:setup}.
+submitted during the testing phase and which the board scored at 85.3. What it bought is
+measured in Appendix~\ref{app:saturation}: 0.008 offline and 0.1 on the board, inside every
+noise estimate in Section~\ref{sec:setup}.
 
 \section{Conclusion}
 
@@ -290,13 +293,13 @@ out-of-fold estimate is not automatically an honest estimate; ours was correctly
 still over-promised by 0.5 QWK. Second, the reported standard deviation of a repeated
 measurement is not the uncertainty of what it measures. Third, on this task the leaderboard was
 the only instrument with adequate resolution, and the second track let us use it without risk.
-That last point is not general advice: it needs two tracks scoring the same gold and a margin
-wide enough to make a losing probe free. Teams without one should budget submissions as
-measurements rather than as attempts.
+That last point needs two tracks scoring the same gold and a margin wide enough to make a
+losing probe free, so teams without one should budget submissions as measurements rather than
+as attempts.
 
-The counterfactual is worth stating plainly. Our own prioritisation document, written before
-these probes, ranked recovering the MARBERTv2 weights as the highest-value action remaining, on
-a +0.41 offline estimate. Following it would have shipped 84.7. If a seven-thousand-row
+Our own prioritisation document, written before these probes, ranked recovering the MARBERTv2
+weights as the highest-value action remaining, on a +0.41 offline estimate. Following it would
+have shipped 84.7. If a seven-thousand-row
 holdout cannot resolve 0.2 QWK, some fraction of the ablation gains published for QWK-scored
 tasks, possibly including some in this paper, are reports of noise. Teams with board access
 should publish paired offline-versus-board comparisons.

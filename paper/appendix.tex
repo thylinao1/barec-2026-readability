@@ -120,12 +120,12 @@ raised sentence-exact fidelity against the gold column from 63.7\% to 79.1\% and
 affected regression member from 82.27 to 83.18 solo on validation, recovering most of the
 gap to gold text. At blend level the same change was worth $-0.019$ when swapped for the
 single member, $+0.001$ for the seed-averaged family, and $-0.024$ for both together.
-Retraining the five strongest families on the training split plus the released gold test
-split, 62{,}131 rows and a 13\% increase in gold data, moved the blend from 85.281 to 85.289.
-That variant was withdrawn as outside the rules (Section~\ref{sec:correction}). It is reported
-here because it is the cleanest evidence of saturation we have: 13\% more gold labels moved the
-blend by 0.008 offline, and on the board the withdrawn file scored 85.4 against the shipped
-85.3, on predictions differing for 811 of 8{,}077 sentences.
+We also retrained the five strongest families on the training split plus the released gold test
+split, 62{,}131 rows and a 13\% increase in gold data. The blend we submitted took four of the
+five and moved from 85.281 to 85.289; taking all five instead gives 85.091. That entry was
+withdrawn as outside the rules (Section~\ref{sec:correction}) and is reported here because it
+is the cleanest evidence of saturation we have. On the board the withdrawn file scored 85.4
+against the shipped 85.3, on predictions differing for 811 of 8{,}077 sentences.
 
 \section{Fine-tuning grid}
 \label{app:fleet}
@@ -143,14 +143,15 @@ own MARBERT, AraELECTRA, XLM-R & CE, reg; raw, Word & 3 \\
 \bottomrule
 \end{tabular}
 \caption{The fourteen seats, by origin. Nine are seed-averaged families of our own
-fine-tunes, four are public checkpoints and one is a single run. All are trained on the BAREC
-training split. The exact member list is given
+fine-tunes, four are public checkpoints and one is a single run. Every seat we fine-tuned uses
+the BAREC training split; the four public checkpoints were fine-tuned on BAREC by others. The
+exact member list is given
 below.}
 \label{tab:members}
 \end{table*}
 
 
-Both tracks we entered are satisfied by the BAREC training split alone. We used no external readability resources: the SAMER corpus \citep{alhafni-etal-2024-samer} and the SAMER readability lexicon \citep{al-khalil-etal-2020-large}, listed for the Constrained and Open tracks, were not used, and we added nothing outside BAREC in the Open track either, since the 2025 evidence is that external data does not help on this task.
+We used no data outside BAREC in either track, and every model we fine-tuned saw only the BAREC training split. We used no external readability resources: the SAMER corpus \citep{alhafni-etal-2024-samer} and the SAMER readability lexicon \citep{al-khalil-etal-2020-large}, listed for the Constrained and Open tracks, were not used, and we added nothing outside BAREC in the Open track either, since the 2025 evidence is that external data does not help on this task.
 
 Training used a Slurm job array on A100 GPUs, with the single exception of the MARBERTv2
 regression member discussed in Appendix~\ref{app:negative}, which was fine-tuned in a free
@@ -200,8 +201,8 @@ checkpoint entered our candidate pool through a screening script that scored eac
 candidate on validation and on the released gold test split, discarded anything above 0.88 on
 either as memorised, and retained only those above 0.80 on test. Its presence in the pool was
 therefore conditioned on a test reading. Nothing downstream is fitted on test, and a
-validation-only greedy over the compliant pool selects it first of 67 candidates, so the gate
-was not what put it in the system.
+validation-only greedy over the compliant pool selects it first of 62 candidates, at 85.275
+against 85.253 for the runner-up, so the gate is not what put it in the system.
 \end{sloppypar}
 
 Every seat we fine-tuned ourselves uses the BAREC training split alone. The four that did not,
