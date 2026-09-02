@@ -21,9 +21,9 @@ blend5, adds MARBERTv2$^\dagger$ & $f = 0.50$ & 84.7 \\
 blend4reg + doc shrinkage$^\dagger$ & $f = 0.50$ & 84.6 \\
 fleet11 & $f = 0.50$ & 85.1 \\
 fleet10strict & $f = 0.50$ & 85.2 \\
-fleet14 (both tracks) & $f = 0.50$ & 85.3 \\
+\textbf{fleet14}, shipped, both tracks & $f = 0.50$ & \textbf{85.3} \\
 fleet14 tie probes, 4 files$^\dagger$ & $f = 0.50$ & 85.2 to 85.3 \\
-\textbf{fleet14tt4}, final, both & $f = 0.50$ & \textbf{85.4} \\
+fleet14tt4, withdrawn & $f = 0.50$ & 85.4 \\
 \bottomrule
 \end{tabular}
 \caption{Blind-phase submissions, in the order they were measured.}
@@ -120,8 +120,12 @@ raised sentence-exact fidelity against the gold column from 63.7\% to 79.1\% and
 affected regression member from 82.27 to 83.18 solo on validation, recovering most of the
 gap to gold text. At blend level the same change was worth $-0.019$ when swapped for the
 single member, $+0.001$ for the seed-averaged family, and $-0.024$ for both together.
-Retraining the five strongest families on train plus the released test split, 62{,}131 rows
-and a 13\% increase in gold data, moved the blend from 85.281 to 85.289.
+Retraining the five strongest families on the training split plus the released gold test
+split, 62{,}131 rows and a 13\% increase in gold data, moved the blend from 85.281 to 85.289.
+That variant was withdrawn as outside the rules (Section~\ref{sec:correction}). It is reported
+here because it is the cleanest evidence of saturation we have: 13\% more gold labels moved the
+blend by 0.008 offline, and on the board the withdrawn file scored 85.4 against the shipped
+85.3, on predictions differing for 811 of 8{,}077 sentences.
 
 \section{Fine-tuning grid}
 \label{app:fleet}
@@ -139,8 +143,8 @@ own MARBERT, AraELECTRA, XLM-R & CE, reg; raw, Word & 3 \\
 \bottomrule
 \end{tabular}
 \caption{The fourteen seats, by origin. Nine are seed-averaged families of our own
-fine-tunes, four are public checkpoints, one is a single run; four use variants retrained on
-train plus the corpus's publicly released gold test split. The exact member list is given
+fine-tunes, four are public checkpoints and one is a single run. All are trained on the BAREC
+training split. The exact member list is given
 below.}
 \label{tab:members}
 \end{table*}
@@ -181,8 +185,8 @@ The fourteen seats of the final system are: the four public-checkpoint champion 
 (\texttt{arabertv02-word-CE}, \texttt{camelbert-word-CE},
 \texttt{qarib-barec-optimized-v8}, \texttt{arabertv2-d3tok-reg} scored through our own
 D3Tok pipeline); seed-averaged families of \texttt{arabertv2-reg-d3tok},
-\texttt{arabertv02-ce-word}, \texttt{alarge02-reg-word} and \texttt{marbert-ce-raw}, each
-retrained on train plus test; seed-averaged families of \texttt{camelbert-ce-word},
+\texttt{arabertv02-ce-word}, \texttt{alarge02-reg-word} and \texttt{marbert-ce-raw};
+seed-averaged families of \texttt{camelbert-ce-word},
 \texttt{qarib-ce-raw}, \texttt{araelectra-reg-word}, \texttt{camelbert-reg-word} and
 \texttt{arabertv2-ce-d3tok}; and a single \texttt{xlm-roberta-large} regression run. The four public checkpoints are
 \texttt{CAMeL-Lab/\allowbreak readability-\allowbreak arabertv02-word-CE},
@@ -193,11 +197,11 @@ retrained on train plus test; seed-averaged families of \texttt{camelbert-ce-wor
 publication.\footnote{\url{https://huggingface.co/AymanTarig/qarib-barec-optimized-v8}}
 \end{sloppypar}
 
-One disclosure belongs here in full view. Four seats are retrained on the concatenation of
-the train and released test splits. The released test split ships gold labels publicly as
-part of the BAREC Corpus; the blind set remains unseen by every member. The 2025 organisers asterisked a sentence-track system
-that had trained on the development set, so rather than assert a classification ourselves
-we state the fact prominently and leave the judgement to the organisers.
+Every one of the fourteen is trained on the BAREC training split alone. The four seats that
+were not, in the entry we first submitted, were replaced by their training-split-only
+counterparts from the same grid after the organisers ruled on them
+(Section~\ref{sec:correction}). The nine seed-averaged families and the single run each carry
+a per-run training configuration on disk, and none of them names any split other than train.
 
 \section{Harness detail}
 \label{app:harness}
@@ -229,7 +233,7 @@ Code, the fine-tuning grid, and the per-run validation and test score arrays are
 \url{https://github.com/thylinao1/barec-2026-readability} under an MIT license. Rebuilding the
 final submission from the committed blender and the member score arrays reproduces the
 submitted file byte for byte; its SHA-256 is
-\texttt{e243ab46a0edb09e\allowbreak 1361e8bcb5215970\allowbreak 8e2f22bb4d90063c\allowbreak 5206932db0bf2516}. The
+\texttt{cf2c752406a9ea2b\allowbreak c0ad94e83f40190c\allowbreak ab87b958512ef9c0\allowbreak 3dcf01c12768b762}. The
 member arrays computed over the blind input are withheld together with everything else
 derived from the confidential blind set, so the rebuild command in the repository README
 needs either those arrays or the blind input to regenerate them.

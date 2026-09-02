@@ -6,8 +6,17 @@ Arabic readability assessment (ArabicNLP 2026, co-located with EMNLP 2026). The 
 fourteen-member equal-weight ensemble of Arabic encoder fine-tunes, decoded from a
 continuous score to the 19-level BAREC scale by 18 tuned cutpoints.
 
-One prediction file was submitted to both sentence-level tracks. It scored 85.4 QWK and
+One prediction file was submitted to both sentence-level tracks. It scored 85.3 QWK and
 placed 2nd on both.
+
+**Correction, 2026-09-03.** The entry first submitted during the testing phase had four of its
+fourteen seats fine-tuned on the training split concatenated with the corpus's released gold
+test split. The organisers ruled that this falls outside the shared task rule that models are
+trained on the training split alone, and it was withdrawn. Everything in this repository now
+describes the replacement: the same fourteen seats with those four swapped for their
+training-split-only counterparts from the same fine-tuning grid, an entry that was also
+submitted during the testing phase and that the board scored at 85.3. The withdrawn variant
+scored 85.4 and differed on 811 of 8,077 rows.
 
 ## Install
 
@@ -44,18 +53,18 @@ It is the byte-parity gate against the official `eval.py`, and it fails without 
 The blend that produced the submitted file:
 
 ```bash
-python scripts/blind_blend.py --tag fleet14tt4 --members \
+python scripts/blind_blend.py --tag fleet14 --members \
   wordCE,camelbert,qarib,reg_myd3,\
-avg-arabertv2-reg-d3tok-tt,avg-arabertv02-ce-word-tt,avg-camelbert-ce-word,\
-avg-qarib-ce-raw,avg-alarge02-reg-word-tt,avg-araelectra-reg-word,\
-avg-camelbert-reg-word,avg-marbert-ce-raw-tt,avg-arabertv2-ce-d3tok,xlmrL-reg-raw-s42
+avg-arabertv2-reg-d3tok,avg-arabertv02-ce-word,avg-camelbert-ce-word,\
+avg-qarib-ce-raw,avg-alarge02-reg-word,avg-araelectra-reg-word,\
+avg-camelbert-reg-word,avg-marbert-ce-raw,avg-arabertv2-ce-d3tok,xlmrL-reg-raw-s42
 ```
 
 With the member score arrays over the blind set in place, that command rebuilds the
 submitted file byte for byte:
 
 ```
-sha256(prediction) = e243ab46a0edb09e1361e8bcb52159708e2f22bb4d90063c5206932db0bf2516
+sha256(prediction) = cf2c752406a9ea2bc0ad94e83f40190cab87b958512ef9c03dcf01c12768b762
 ```
 
 Those blind arrays are not published (see "What is not published" below), so the command
@@ -73,8 +82,7 @@ monotone cutpoints map the averaged score to a level in 1..19. The cutpoints are
 midpoint between thresholds fitted on validation and thresholds chosen to match the blind
 score distribution to the training label prior, at `f = 0.50`. Four seats are public
 CAMeL-Lab checkpoints, nine are seed-averaged families of our own fine-tunes and one is a
-single run; four seats use variants retrained on train plus the corpus's publicly released
-gold test split, which the paper's appendix discloses in full.
+single run. Every seat is trained on the BAREC training split alone.
 
 The members came from a Slurm fine-tuning grid on A100 GPUs (`scripts/cluster/`). The
 manifest defines 112 runs; `artifacts/fleet/runs/` holds 133 directories, 113 of which carry
@@ -126,16 +134,22 @@ untangle.
 
 ## Results
 
-Final blind-test standings, pulled from the Codabench leaderboard API on 2026-08-04.
+Final blind-test standings. Submission counts and the first-place scores were pulled from the
+Codabench leaderboard API; our own row is the corrected entry (see the correction note above).
 
-| track | ranked submissions | our rank | QWK | Acc | Acc±1 | Dist | Acc7 | Acc5 | Acc3 |
-|---|---|---|---|---|---|---|---|---|---|
-| Open | 4 | 2 | 85.4 | 37.8 | 71.3 | 1.1 | 60.1 | 67.1 | 74.8 |
-| Strict | 11 | 2 | 85.4 | 37.8 | 71.3 | 1.1 | 60.1 | 67.1 | 74.8 |
+| track | ranked submissions | our rank | QWK | Acc |
+|---|---|---|---|---|
+| Open | 4 | 2 | 85.3 | 37.7 |
+| Strict | 11 | 2 | 85.3 | 37.7 |
 
-The first-place entry scored 85.5 on Open. On Strict it also scored 85.4 and took first on
-the tie-breaking secondary metric, exact accuracy, 38.7 against our 37.8. Full leaderboard
-tables and the checks behind them are in `paper/VERIFIED_FACTS.md`.
+Only QWK and exact accuracy are given, because those are the two figures recorded for this
+file when it was read on the board during the testing phase (Open submission 872638,
+2026-08-01). The other five metrics the board prints were recorded for the withdrawn entry and
+do not carry over, since the two files disagree on 811 rows. They will be filled in from the
+organisers' rescore.
+
+The first-place entry scored 85.5 on Open and 85.4 on Strict. Full leaderboard tables and the
+checks behind them are in `paper/VERIFIED_FACTS.md`.
 
 ## What is not published
 
