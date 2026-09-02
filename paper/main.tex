@@ -255,25 +255,27 @@ pack (Appendix~\ref{app:saturation}).
 \subsection{The endgame}
 
 With the mean provably capped, we changed the selection criterion. A dual gate, requiring a
-candidate to beat the baseline on both honest nested out-of-fold and a deployment-mirrored
-oracle on a second labelled holdout, called four staged candidates statistical ties; probed
+candidate to beat the baseline both on honest nested out-of-fold and on a deployment-mirrored
+oracle over the released gold test split, called four staged candidates statistical ties; probed
 on the board they returned 85.2, 85.2, 85.2 and 85.3, four for four at the board's
 resolution. So we stopped ranking candidates by offline score and ranked them by
 disagreement with the incumbent. Five near-clones, differing on 2\% to 12\% of rows, drew
-ties as well. The board ran out of resolution before our pool ran out of candidates.
+ties as well. The board ran out of resolution before our pool ran out of candidates. The test
+leg never overturned validation: its one promoted candidate failed the validation leg, and the
+board agreed.
 
 \subsection{Final standing}
 
 We finished second on both tracks with 85.3 QWK and 37.7 exact accuracy. Open ranked 4
 submissions and the winner scored 85.5; Strict ranked 11 and the winner scored 85.4. The
-winner's exact accuracy exceeded ours on both tracks, 39.5 against 37.7 in Open, a
-system-level difference our pool could not reach by recombination, calibration or retraining.
+winner's exact accuracy exceeded ours on both tracks, 39.5 against 37.7 in Open, a difference
+our pool could not reach by recombination, calibration or retraining.
 
 \subsection{Correction to the submitted system}
 \label{sec:correction}
 
 The entry we first submitted had four of its fourteen seats fine-tuned on the training split
-concatenated with the corpus's released gold test split. We disclosed this to the organisers
+plus the corpus's released gold test split. We disclosed this to the organisers
 and in this paper, having read it as permitted; after the phase closed they ruled otherwise and
 we withdrew it. Every number here is the same fourteen-seat ensemble with those four seats
 replaced by their training-split-only counterparts from the same grid, an entry we also

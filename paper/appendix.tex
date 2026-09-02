@@ -194,7 +194,14 @@ seed-averaged families of \texttt{camelbert-ce-word},
 \texttt{CAMeL-Lab/\allowbreak readability-\allowbreak arabertv2-d3tok-reg}, released with the BAREC corpus
 \citep{elmadani-etal-2025-large}, and the community checkpoint
 \texttt{AymanTarig/\allowbreak qarib-barec-optimized-v8}, which has no associated
-publication.\footnote{\url{https://huggingface.co/AymanTarig/qarib-barec-optimized-v8}}
+publication and documents no training
+data.\footnote{\url{https://huggingface.co/AymanTarig/qarib-barec-optimized-v8}} That
+checkpoint entered our candidate pool through a screening script that scored each public
+candidate on validation and on the released gold test split, discarded anything above 0.88 on
+either as memorised, and retained only those above 0.80 on test. Its presence in the pool was
+therefore conditioned on a test reading. Nothing downstream is fitted on test, and a
+validation-only greedy over the compliant pool selects it first of 67 candidates, so the gate
+was not what put it in the system.
 \end{sloppypar}
 
 Every seat we fine-tuned ourselves uses the BAREC training split alone. The four that did not,
