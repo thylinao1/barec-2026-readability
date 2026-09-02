@@ -150,7 +150,7 @@ below.}
 \end{table*}
 
 
-Both tracks we entered are satisfied by BAREC data alone. We used no external readability resources: the SAMER corpus \citep{alhafni-etal-2024-samer} and the SAMER readability lexicon \citep{al-khalil-etal-2020-large}, listed for the Constrained and Open tracks, were not used, and we added nothing outside BAREC in the Open track either, since the 2025 evidence is that external data does not help on this task.
+Both tracks we entered are satisfied by the BAREC training split alone. We used no external readability resources: the SAMER corpus \citep{alhafni-etal-2024-samer} and the SAMER readability lexicon \citep{al-khalil-etal-2020-large}, listed for the Constrained and Open tracks, were not used, and we added nothing outside BAREC in the Open track either, since the 2025 evidence is that external data does not help on this task.
 
 Training used a Slurm job array on A100 GPUs, with the single exception of the MARBERTv2
 regression member discussed in Appendix~\ref{app:negative}, which was fine-tuned in a free
