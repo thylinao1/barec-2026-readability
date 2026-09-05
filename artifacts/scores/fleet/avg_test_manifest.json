@@ -1,0 +1,139 @@
+{
+  "avg-alarge02-reg-word": [
+    "alarge02-reg-word-s1",
+    "alarge02-reg-word-s2",
+    "alarge02-reg-word-s3",
+    "alarge02-reg-word-s4",
+    "alarge02-reg-word-s42"
+  ],
+  "avg-alarge02-softqwk": [
+    "alarge02-softqwk-word-s1",
+    "alarge02-softqwk-word-s2",
+    "alarge02-softqwk-word-s3"
+  ],
+  "avg-arabertv02-ce-word": [
+    "arabertv02-ce-word-s1",
+    "arabertv02-ce-word-s2",
+    "arabertv02-ce-word-s3",
+    "arabertv02-ce-word-s4",
+    "arabertv02-ce-word-s5"
+  ],
+  "avg-arabertv02-focal-word": [
+    "arabertv02-focal-word-s1",
+    "arabertv02-focal-word-s2",
+    "arabertv02-focal-word-s3",
+    "arabertv02-focal-word-s4",
+    "arabertv02-focal-word-s42"
+  ],
+  "avg-arabertv2-ce-d3tok": [
+    "arabertv2-ce-d3tok-s1",
+    "arabertv2-ce-d3tok-s2",
+    "arabertv2-ce-d3tok-s3",
+    "arabertv2-ce-d3tok-s4",
+    "arabertv2-ce-d3tok-s42"
+  ],
+  "avg-arabertv2-reg-d3tok": [
+    "arabertv2-reg-d3tok-s1",
+    "arabertv2-reg-d3tok-s2",
+    "arabertv2-reg-d3tok-s3",
+    "arabertv2-reg-d3tok-s4",
+    "arabertv2-reg-d3tok-s5"
+  ],
+  "avg-arabertv2-softqwk": [
+    "arabertv2-softqwk-d3tok-s1",
+    "arabertv2-softqwk-d3tok-s2",
+    "arabertv2-softqwk-d3tok-s3"
+  ],
+  "avg-araelectra-reg-word": [
+    "araelectra-reg-word-s1",
+    "araelectra-reg-word-s2",
+    "araelectra-reg-word-s3",
+    "araelectra-reg-word-s4",
+    "araelectra-reg-word-s42"
+  ],
+  "avg-araelectra-softqwk": [
+    "araelectra-softqwk-word-s1",
+    "araelectra-softqwk-word-s2"
+  ],
+  "avg-arbertv2-ce-word": [
+    "arbertv2-ce-word-s1",
+    "arbertv2-ce-word-s2",
+    "arbertv2-ce-word-s3",
+    "arbertv2-ce-word-s4",
+    "arbertv2-ce-word-s42"
+  ],
+  "avg-arbertv2-reg-word": [
+    "arbertv2-reg-word-s1",
+    "arbertv2-reg-word-s2",
+    "arbertv2-reg-word-s3",
+    "arbertv2-reg-word-s4",
+    "arbertv2-reg-word-s42"
+  ],
+  "avg-camelbert-ce-word": [
+    "camelbert-ce-word-s1",
+    "camelbert-ce-word-s2",
+    "camelbert-ce-word-s3",
+    "camelbert-ce-word-s4",
+    "camelbert-ce-word-s5"
+  ],
+  "avg-camelbert-reg-word": [
+    "camelbert-reg-word-s1",
+    "camelbert-reg-word-s2",
+    "camelbert-reg-word-s3",
+    "camelbert-reg-word-s4",
+    "camelbert-reg-word-s42"
+  ],
+  "avg-camelbert-softqwk": [
+    "camelbert-softqwk-word-s1",
+    "camelbert-softqwk-word-s2"
+  ],
+  "avg-camelca-ce-word": [
+    "camelca-ce-word-s1",
+    "camelca-ce-word-s2",
+    "camelca-ce-word-s3",
+    "camelca-ce-word-s4",
+    "camelca-ce-word-s42"
+  ],
+  "avg-camelca-reg-word": [
+    "camelca-reg-word-s1",
+    "camelca-reg-word-s2",
+    "camelca-reg-word-s3",
+    "camelca-reg-word-s4",
+    "camelca-reg-word-s42"
+  ],
+  "avg-marbert-ce-raw": [
+    "marbert-ce-raw-s1",
+    "marbert-ce-raw-s2",
+    "marbert-ce-raw-s3",
+    "marbert-ce-raw-s4",
+    "marbert-ce-raw-s42"
+  ],
+  "avg-mdeberta-reg-raw": [
+    "mdeberta-reg-raw-s1",
+    "mdeberta-reg-raw-s2",
+    "mdeberta-reg-raw-s3",
+    "mdeberta-reg-raw-s4",
+    "mdeberta-reg-raw-s42"
+  ],
+  "avg-qarib-ce-raw": [
+    "qarib-ce-raw-s1",
+    "qarib-ce-raw-s2",
+    "qarib-ce-raw-s3",
+    "qarib-ce-raw-s4",
+    "qarib-ce-raw-s5"
+  ],
+  "avg-qarib60-ce-raw": [
+    "qarib60-ce-raw-s1",
+    "qarib60-ce-raw-s2",
+    "qarib60-ce-raw-s3",
+    "qarib60-ce-raw-s4",
+    "qarib60-ce-raw-s42"
+  ],
+  "avg-xlmrL-reg-raw": [
+    "xlmrL-reg-raw-s1",
+    "xlmrL-reg-raw-s2",
+    "xlmrL-reg-raw-s3",
+    "xlmrL-reg-raw-s4",
+    "xlmrL-reg-raw-s42"
+  ]
+}

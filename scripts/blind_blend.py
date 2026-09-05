@@ -72,9 +72,10 @@ REG = {
 # fleet members landed by scripts/fleet_land.py register themselves by file pair
 for _vp in sorted((S / "fleet").glob("*_val.npy")) if (S / "fleet").exists() else []:
     _name = _vp.name[:-8]  # strip _val.npy
-    _bp = S / "fleet" / f"{_name}_blind.npy"
-    if _bp.exists():
-        REG[_name] = (_vp, _bp)
+    # Registered on the validation array alone, so the analysis scripts resolve every member
+    # from the published public-split arrays. The blind array is checked where it is loaded
+    # (the blender's own missing-file check below), and every landed member has both files.
+    REG[_name] = (_vp, S / "fleet" / f"{_name}_blind.npy")
 
 
 def z(a):

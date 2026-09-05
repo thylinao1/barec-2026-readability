@@ -28,8 +28,8 @@
 \maketitle
 
 \begin{abstract}
-Team thylinao entered both tracks of the BAREC 2026 shared task on sentence-level Arabic
-readability with a deliberately plain system: a fourteen-member equal-weight ensemble of
+Team thylinao entered the Open and Strict tracks of the BAREC 2026 shared task on
+sentence-level Arabic readability with a deliberately plain system: a fourteen-member equal-weight ensemble of
 encoder fine-tunes, decoded to the 19-level scale by cutpoints interpolated halfway between
 validation-tuned thresholds and thresholds that match the blind score distribution to the
 training label prior. It scored 85.3 QWK on both tracks, second on both. This paper is about
@@ -58,9 +58,6 @@ decision worth a submission from a live board reading. This paper describes the 
 finished second on both tracks at 85.3 QWK, and the measurement discipline that chose it,
 which we believe is the part worth reusing.\footnote{Code, the fine-tuning grid and the
 per-run score arrays: \url{https://github.com/thylinao1/barec-2026-readability}}
-
-The system is ordinary on purpose, and we report that plainness as a result: every fitted
-alternative we tried scored below plain equal weight (Section~\ref{sec:results}).
 
 The first application of the rule came early. The public CAMeL-Lab readability checkpoints
 were fine-tuned on the BAREC corpus, which contains the shared task's training split, so
@@ -100,7 +97,12 @@ data mostly did not help, and the organisers say so directly
 \citep{elmadani-etal-2025-barec-shared-task}: the winning system scored worse in Open than in
 Strict. That is why our Open and Strict systems are identical. We treated the Open track not as
 a licence to add outside corpora but as a second measurement of the same blind gold, which
-turned out to be worth more.
+turned out to be worth more. Earlier Arabic readability resources include the OSMAN metric,
+a formula in the Flesch and Fog tradition with Arabic syllable counting
+\citep{el-haj-rayson-2016-osman}, the SAMER 26,000-lemma levelled lexicon and simplification
+corpus for school-aged learners \citep{al-khalil-etal-2020-large,alhafni-etal-2024-samer},
+and DARES, 13,335 instances from Saudi school textbooks \citep{el-haj-etal-2024-dares};
+BAREC differs in grading single sentences on 19 levels.
 
 \section{System Overview}
 \label{sec:system}
@@ -180,7 +182,8 @@ and vocabulary do not leak, and serialised to a committed fold map that is never
 regenerated. Our go/no-go number is a nested out-of-fold QWK in which cutpoints are fitted
 on the other folds and applied to the held-out fold, so thresholds never see the rows they
 score. Every member shows validation below test by about 1.3 QWK, which correctly predicted
-the blind set would score nearer 85 than 86.
+the blind set would score nearer 85 than 86. Appendix~\ref{app:datause} states what each
+split was used for.
 
 \paragraph{Calibrating the instrument.} We estimated the noise of that protocol three ways.
 Holding data, members and weights fixed and varying only the threshold search grid between
@@ -203,8 +206,7 @@ mechanics constrain the protocol, and both cost us before we understood them. Fi
 believed Codabench displays each participant's latest submission; the competition API showed a
 submission rule of \texttt{Add}, so the board shows the entry the participant explicitly added
 and probing is close to free. Second, the board orders equal QWK by exact accuracy, so only a
-strictly better score should be sent to a track we lead. We record both because a system
-description that omits them would misrepresent how the final submission was chosen.
+strictly better score should be sent to a track we lead.
 
 \section{Results}
 \label{sec:results}
@@ -268,21 +270,22 @@ validation leg, and the board agreed.
 
 \subsection{Final standing}
 
-We finished second on both tracks with 85.3 QWK and 37.7 exact accuracy. Open ranked 4
-submissions and the winner scored 85.5; Strict ranked 11 and the winner scored 85.4. The
-winner's exact accuracy exceeded ours on both tracks, 39.5 against 37.7 in Open, a difference
-our pool could not reach by recombination, calibration or retraining.
+We finished second on both tracks with 85.3 QWK and 37.7 exact accuracy (85.27 and 37.75 in
+the organisers' rescoring, Appendix~\ref{app:ledger}). Open ranked 4 submissions and its
+winner scored 85.5; Strict ranked 11 and its winner 85.4. The winner's exact accuracy
+exceeded ours on both tracks, 39.5 against 37.7 in Open, which our pool could not reach by
+recombination, calibration or retraining.
 
 \subsection{Correction to the submitted system}
 \label{sec:correction}
 
 The entry we first submitted had four of its fourteen seats fine-tuned on the training split
 plus the corpus's released gold test split. We disclosed this to the organisers and in this
-paper, but we had read the rule wrongly: it says models are trained exclusively on the training
-set. The organisers told us so after the phase closed and the entry was withdrawn. Every number
-in this paper is the same fourteen-seat ensemble with those four seats
-replaced by their training-split-only counterparts from the same grid, an entry we also
-submitted during the testing phase and which the board scored at 85.3. What it bought is
+paper but had read the rule wrongly: it says models are trained exclusively on the training
+set. The organisers said so after the phase closed and we withdrew the entry. Every number
+for our system is the same ensemble with those four seats
+replaced by their training-split-only counterparts from the same grid, an entry also
+submitted during the testing phase, which the board scored at 85.3. What it bought is
 measured in Appendix~\ref{app:saturation}: 0.008 offline and 0.1 on the board, inside every
 noise estimate in Section~\ref{sec:setup}.
 
@@ -297,10 +300,7 @@ That last point needs two tracks scoring the same gold and a margin wide enough 
 losing probe free, so teams without one should budget submissions as measurements rather than
 as attempts.
 
-Our own prioritisation document, written before these probes, ranked recovering the MARBERTv2
-weights as the highest-value action remaining, on a +0.41 offline estimate. Following it would
-have shipped 84.7. If a seven-thousand-row
-holdout cannot resolve 0.2 QWK, some fraction of the ablation gains published for QWK-scored
+If a seven-thousand-row holdout cannot resolve 0.2 QWK, some fraction of the ablation gains published for QWK-scored
 tasks, possibly including some in this paper, are reports of noise. Teams with board access
 should publish paired offline-versus-board comparisons.
 
@@ -315,6 +315,14 @@ degraded relative to a licensed team's, and the standardisation fix recovers the
 usefulness without recovering that loss. Finally, equal weights and a single calibration
 scalar are unrefuted at our measurement resolution rather than shown optimal; we cannot rule
 out that a better combiner exists below our noise floor.
+
+Two of our practices depart from a single-shot test protocol, and a reader who holds to that
+protocol should discount them: cutpoints are adjusted to the blind prediction histogram, and
+among offline ties the shipped candidate was chosen by leaderboard readings. Both are
+label-free or mediated by the board within the task's submission limit, and
+Appendix~\ref{app:datause} lists every such reading so that the departure is auditable, but
+it is a departure, and the released test split served as a second holdout that we read
+repeatedly rather than as one final measurement.
 
 \section*{Ethical Considerations}
 
@@ -331,7 +339,8 @@ users of a deployed system.
 
 \section*{Acknowledgements}
 
-We thank the shared task organisers. Fine-tuning ran on the National University of Singapore
+We thank the shared task organisers, in particular for rescoring the corrected submission
+after the phase had closed. Fine-tuning ran on the National University of Singapore
 School of Computing compute cluster.
 
 % acl.sty already issues \bibliographystyle{acl_natbib}; repeating it here makes

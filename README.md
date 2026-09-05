@@ -127,7 +127,8 @@ untangle.
 | `scripts/cluster/` | Slurm job array and the 112-row fine-tuning grid |
 | `scripts/endgame/` | final-day instruments and the aggregation experiments |
 | `notebooks/` | the Kaggle T4 fine-tuning recipe and its setup notes |
-| `artifacts/fleet/runs/` | per-run validation and test score arrays, public splits only |
+| `artifacts/fleet/runs/` | per-run validation and test score arrays as saved on the cluster, public splits only |
+| `artifacts/scores/` | the score arrays the blending and analysis scripts read: public-checkpoint members at the top level, locally recomputed validation arrays and seed-average test arrays under `fleet/`, per-run test arrays in the layout the endgame scripts expect under `cluster_test/`, and the validation and test arrays of the locally tokenised D3Tok members under `blind/`; public splits only |
 | `artifacts/folds_2026_train.json` | the committed document-to-fold map |
 | `paper/` | LaTeX source of the system description paper and a verification log |
 | `tests/` | harness tests, including the byte-parity gate against `eval.py` |
@@ -137,16 +138,16 @@ untangle.
 Final blind-test standings. Submission counts and the first-place scores were pulled from the
 Codabench leaderboard API; our own row is the corrected entry (see the correction note above).
 
-| track | ranked submissions | our rank | QWK | Acc |
-|---|---|---|---|---|
-| Open | 4 | 2 | 85.3 | 37.7 |
-| Strict | 11 | 2 | 85.3 | 37.7 |
+| track | ranked submissions | our rank | QWK | Acc | Acc±1 | Dist | Acc7 | Acc5 | Acc3 |
+|---|---|---|---|---|---|---|---|---|---|
+| Open | 4 | 2 | 85.27 | 37.75 | 70.82 | 1.136 | 60.51 | 66.93 | 74.59 |
+| Strict | 11 | 2 | 85.27 | 37.75 | 70.82 | 1.136 | 60.51 | 66.93 | 74.59 |
 
-Only QWK and exact accuracy are given, because those are the two figures recorded for this
-file when it was read on the board during the testing phase (Open submission 872638,
-2026-08-01). The other five metrics the board prints were recorded for the withdrawn entry and
-do not carry over, since the two files disagree on 811 rows. They will be filled in from the
-organisers' rescore.
+The seven metrics are the organisers' rescoring of the corrected file, sent to us on
+2026-09-04 after the phase had closed: QWK 0.852738, accuracy 0.377492, adjacent accuracy
+0.708184, average absolute distance 1.136189, and 0.605051 / 0.669308 / 0.745945 at the 7, 5
+and 3 collapsed levels. They round to the 85.3 / 37.7 the board displayed for the same file
+during the testing phase (Open submission 872638, 2026-08-01).
 
 The first-place entry scored 85.5 on Open and 85.4 on Strict. Full leaderboard tables and the
 checks behind them are in `paper/VERIFIED_FACTS.md`.
@@ -156,9 +157,13 @@ checks behind them are in `paper/VERIFIED_FACTS.md`.
 Predictions over the blind test set are not included. The blind set is released only to
 registered participants and may be reused in a future edition of the shared task, so a
 strong prediction file over it would be a pseudo-label source for later entrants. Member
-score arrays over the blind set are withheld for the same reason. The code regenerates both
-from the blind input for anyone who holds it, and the sha256 above lets the organisers
-verify the submitted file exactly.
+score arrays over the blind set are withheld for the same reason: every `*_blind.npy` that
+the scripts write under `artifacts/scores/` is absent, as is the gold-derived D3Tok lexicon.
+Every score array over the public validation and test splits is published, which is what
+`artifacts/scores/` contains (the `blind/` folder there holds only the validation and test
+arrays of the locally tokenised members, named as the scripts expect them). The code
+regenerates the withheld arrays from the blind input for anyone who holds it, and the sha256
+above lets the organisers verify the submitted file exactly.
 
 ## Citation
 

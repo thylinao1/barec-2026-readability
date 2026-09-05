@@ -1,4 +1,4 @@
-# VERIFIED_FACTS — everything checked first-hand on 2026-08-04
+# VERIFIED_FACTS: everything checked first-hand on 2026-08-04
 
 Only facts confirmed by a live fetch, a run, or a file read appear here. Anything that
 could not be confirmed is listed under "Unconfirmable" with the fallback the paper uses.
@@ -9,7 +9,8 @@ could not be confirmed is listed under "Unconfirmable" with the fallback the pap
 
 On 2026-09-02 Khalid Elmadani wrote that our system "appears to use the test set for training",
 which is not permitted, and asked for a retrained system, an updated paper and the final
-prediction file by 2026-09-07, failing which the paper will not be accepted.
+prediction file by 2026-09-07, failing which the paper will not be accepted (verbatim in
+`docs/correction/ORGANISER-RULING-2026-09-02.md`).
 
 He is right. Four of the fourteen seats in `fleet14tt4` were fine-tuned on train plus the
 released gold test split (`artifacts/fleet/runs/<name>-tt-s*/meta.json` carries
@@ -24,9 +25,40 @@ those four replaced by their training-split-only counterparts.
   the pre-correction paper printed. They differ on 811 of 8,077 rows.
 - Board reading for the shipped file: 85.3 QWK, exact accuracy 37.7, Open submission id 872638,
   2026-08-01, also uploaded to Strict that day. Source is the campaign log written on the day
-  (`HANDOFF.md` lines 105 to 108 and 245). The other five board metrics were not recorded for
-  this file and are NOT recoverable from the public API, so the paper reports only QWK and
-  exact accuracy until the organisers rescore the resubmitted file.
+  (`HANDOFF.md` lines 105 to 108 and 245).
+- **Official rescoring, received from Khalid Elmadani on 2026-09-04** (Gmail thread
+  `1a0621ad1865e59f`; verbatim copy and checks in
+  `docs/correction/ORGANISER-RESCORE-2026-09-04.md`) of the file attached to our 2026-09-03
+  reply, which is byte-identical to the zip above: Accuracy 0.377492, Accuracy (±1) 0.708184,
+  Average Absolute Distance 1.136189, QWK 0.852738, Accuracy 7-point 0.605051, 5-point
+  0.669308, 3-point 0.745945. Every rate times 8,077 lands within 0.003 of an integer (3,049 /
+  5,720 / 4,887 / 5,406 / 6,025 correct, distance sum 9,177), so the scored file has the blind
+  set's row count,
+  and QWK and accuracy round to the board's 85.3 / 37.7. The paper prints the line after the
+  ledger table in Appendix A as 85.27 / 37.75 / 70.82 / 1.136 / 60.51 / 66.93 / 74.59, and the
+  Final standing subsection points to it with "(85.27 and 37.75 in the organisers'
+  rescoring, Appendix A)". The body had no room for more: the 4-page limit was met to the line.
+- **Development-split tuning ruled in, same email, verbatim:** "we don't have a tuning set in
+  BAREC corpus, so you can use the development set for tuning thresholds and model selection."
+  The paper says so at the end of the training-data paragraph in Appendix D (`app:fleet`).
+- Camera-ready due **2026-09-10** on OpenReview
+  (`https://openreview.net/group?id=SIGARAB.org/ArabicNLP/2026/BAREC_Shared_Task`), re-fetched
+  2026-09-05. The ArabicNLP 2026 conference site says 2026-09-17 for camera-ready; the shared
+  task's earlier date governs. What the OpenReview camera-ready form asks for beyond the PDF
+  (author metadata, publication agreement, source files) is UNVERIFIED: the group is
+  login-gated and its public instructions field is empty.
+- **Decision and reviews, read on OpenReview by the operator 2026-09-05** (verbatim in
+  `docs/correction/OPENREVIEW-DECISION-2026-09-02.md`): **Accept (Conditional)**, decision
+  comment = the 2 Sept email text (retrain, final file by 7 Sept). Reviewer bsMq (rating 2,
+  confidence 5) asks for three things: name the two tracks in the abstract; broaden related
+  work to SAMER, DARES and OSMAN; clarify the data-use procedure, since the test split should
+  be evaluated once and the blind set must not shape the system. Reviewer VtE3 (rating 4):
+  "Solid presentation. no issues." The camera-ready answers all three bsMq points (section
+  12 of `docs/correction/CORRECTION-2026-09.md`).
+- The live Codabench boards (phases 29340 and 29342, API re-read 2026-09-05) still list
+  thylinao at the withdrawn 85.4 / 37.8 on both tracks with no withdrawn marker. The paper and
+  README print the corrected line; REPLY-2-DRAFT.md asks the organisers whether the overview
+  and final leaderboard will carry it.
 - Placings do not change. Against the final boards pulled live on 2026-09-02, 85.3 is second on
   Open (winner 85.5, third 81.7) and second on Strict (winner 85.4, third 84.8). The Strict tie
   at 85.4, and therefore the accuracy tie-break, no longer applies to us.
@@ -40,7 +72,9 @@ those four replaced by their training-split-only counterparts.
 - fleet14 is a local optimum of the compliant pool: all 14 leave-one-out drops cost 0.102 to
   0.357, and all 148 single-member additions from the 162-member compliant pool score below it.
 - Still undocumented: the training data of `AymanTarig/qarib-barec-optimized-v8`, one of the
-  fourteen seats. Raised with the organisers in the reply.
+  fourteen seats. A question about it was drafted but cut from the reply actually sent on
+  2026-09-03, which asked only about development-split tuning and the metric line. It has
+  NOT been raised with the organisers.
 
 Full record: `docs/correction/CORRECTION-2026-09.md`.
 
@@ -66,10 +100,29 @@ the training set of the BAREC Corpus." The four seats retrained on train plus th
 test split therefore fall outside a literal reading. The paper no longer claims they are
 "legal in both tracks"; it states the fact and leaves the judgement to the organisers.
 
-Open for camera-ready: `artifacts/scores/` (25 non-blind arrays, 3.2 MB) is not in the
-public repo, so the README rebuild command fails on a missing directory before reaching the
-deliberately withheld blind arrays. Also move the leaderboard citation to the official
-final board once it is published on 2026-09-02.
+DONE 2026-09-05: `artifacts/scores/` is now in the public checkout under one rule, "every
+score array over a public split is published, every array over the blind set is withheld".
+Copied by rsync from the private directory: the 20 top-level validation and test arrays
+(train arrays, `.kaggle` copies, `phase1_oof.npy` and the backup folder left out), `fleet/`
+without its 172 `*_blind.npy` (172 locally recomputed `*_val.npy`, 22 seed-average
+`*_test.npy`, the manifest), `cluster_test/` in full (116 per-run test arrays, byte-identical
+to the runs' arrays under `artifacts/fleet/runs/` but in the layout `endgame/common.py`
+resolves), and the seven validation and test arrays from `blind/` (`reg_valmyd3`,
+`dtCE_valmyd3`, `regold_*`, `regv2_*`), with the blind arrays and `d3tok_lexicon.json` left
+out. 339 files, 18 MB, zero `*_blind.npy` anywhere. The fleet `*_val.npy` are NOT duplicates
+of the runs' `*_validation.npy` (different bytes: they are the local recomputation the parity
+gate requires), which is why both are published. Verified by running
+`scripts/noise_floor.py` in the public checkout with the three parquet files staged under the
+gitignored `data/`: exit 0 in 12 min 53 s, paired bootstrap +0.240 with 95% CI [+0.030,
++0.451] and bit-identical fold-seed results, the figures Section 4 prints. The endgame
+scripts needed one code change in both repos, the blender's registry and
+`members_with_test()` keyed on the validation array instead of the blind one; verified
+result-preserving (same 141-member pool as the original code with blind arrays present, all
+14 FLEET14 members resolving in the public checkout), details in
+`docs/correction/CORRECTION-2026-09.md` section 10. The
+leaderboard-citation item that used to sit here is done: no leaderboard citation remains in
+the paper, and Section 5 already cites the final boards (winner 85.5 Open / 85.4 Strict, 4 and
+11 ranked).
 
 ---
 
@@ -201,7 +254,7 @@ nine are seed-averaged families of our own fine-tunes; one is a single run
 (xlmrL-reg-raw-s42). Four of the fourteen are the train+test retrained variants (`-tt`).
 
 `fleet14tt4` differs from the previous incumbent `fleet14` on **811 of 8,077 rows
-(10.0%)** — measured, not quoted.
+(10.0%)**, measured, not quoted.
 
 ## D. Fine-tuning fleet, counted from disk
 
@@ -213,7 +266,7 @@ nine are seed-averaged families of our own fine-tunes; one is a single run
   `araelectra-base-discriminator`; `CAMeL-Lab/bert-base-arabic-camelbert-msa`, `-ca`;
   `UBC-NLP/MARBERTv2`, `ARBERTv2`; `ahmedabdelali/bert-base-qarib`,
   `bert-base-qarib60_1970k`; `FacebookAI/xlm-roberta-large`; `microsoft/mdeberta-v3-base`).
-- Loss families in the manifest: **6** — ce 45, reg 44, softqwk 10, focal 6, corn 5, soft 2.
+- Loss families in the manifest: **6**: ce 45, reg 44, softqwk 10, focal 6, corn 5, soft 2.
 - Blendable member pool (a member counts only if it has a matched validation and blind
   score array): **172**, of which **26** are seed-averaged families and 146 single runs.
 - No model weights are tracked in git (checked: zero `.safetensors` / `pytorch_model` files).

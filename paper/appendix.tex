@@ -29,6 +29,12 @@ fleet14tt4, withdrawn & $f = 0.50$ & 85.4 \\
 \caption{Blind-phase submissions, in the order they were measured.}
 \end{table}
 
+The organisers' rescoring of the shipped file, sent to us on 4 September 2026 after the phase
+closed and after their ruling of 2 September that the first entry fell outside the rules, is
+QWK 85.27, exact accuracy 37.75, adjacent accuracy 70.82, average absolute distance 1.136,
+and 60.51 / 66.93 / 74.59 at the 7, 5 and 3 collapsed levels. It rounds to the board's 85.3
+and 37.7.
+
 Two rows in our internal log recorded a track that we could not re-confirm after the phase
 closed, and one calibration reading at $f = 0.40$ came from an ambiguous screenshot. The
 authenticated submission history is not reachable through the public API, so rather than
@@ -125,7 +131,14 @@ split, 62{,}131 rows and a 13\% increase in gold data. The blend we submitted to
 five and moved from 85.281 to 85.289; taking all five instead gives 85.091. That entry was
 withdrawn as outside the rules (Section~\ref{sec:correction}) and is reported here because it
 is the cleanest evidence of saturation we have. On the board the withdrawn file scored 85.4
-against the shipped 85.3, on predictions differing for 811 of 8{,}077 sentences.
+against the shipped 85.3, on predictions differing for 811 of 8{,}077 sentences. The gap is
+as small on all seven official metrics, listed in the order QWK, exact and adjacent accuracy,
+average absolute distance and the 7, 5 and 3 level accuracies: the withdrawn file's board
+line was 85.4 / 37.8 / 71.3 / 1.1 / 60.1 / 67.1 / 74.8, and the organisers' rescoring of the
+shipped file, rounded to the same precision, reads 85.3 / 37.7 / 70.8 / 1.1 / 60.5 / 66.9 /
+74.6. No metric moved by more
+than half a point at the board's precision, and the seven-level accuracy is the only one
+that rose.
 
 \section{Fine-tuning grid}
 \label{app:fleet}
@@ -212,7 +225,9 @@ seed-averaged families and the single run each carry a per-run training configur
 and none names any split other than train. The four public checkpoints were fine-tuned on
 BAREC by others: three are the corpus authors' own baselines, whose paper describes fitting on
 train and selecting on dev, and the fourth is a community checkpoint whose author documents no
-training data at all, which we report because we cannot verify it.
+training data at all, which we report because we cannot verify it. Cutpoints and member
+selection are fitted on the validation split, the corpus's development set, which the
+organisers confirmed is within the rules, since the corpus has no separate tuning split.
 
 \section{Harness detail}
 \label{app:harness}
@@ -236,6 +251,40 @@ The parity gate compares our scorer against the official development fixture at 
 the printed string: QWK 80.0040\%, accuracy 56.6211\%, adjacent accuracy 69.8632\%, average
 absolute distance 1.143776, and 65.8687\% / 70.2736\% / 76.4569\% at 7, 5 and 3 collapsed
 levels.
+
+\section{Data use by split}
+\label{app:datause}
+
+\paragraph{Train.} Fine-tunes every member we trained, and supplies the label prior $p$ in
+Equation~1. It is not a tuning surface: the public checkpoints were fine-tuned on the BAREC
+corpus, which contains this split, so their train predictions are in-sample, at solo QWK of
+89 to 95 against 82 to 84 on clean holdouts, and any weight or cutpoint tuned on train would
+be tuned on memorised labels.
+
+\paragraph{Validation.} Fits the 18 cutpoints, selects members by forward selection run
+nested out-of-fold, and yields the go/no-go estimate of Section~\ref{sec:setup} and every
+figure in Appendix~\ref{app:saturation}.
+
+\paragraph{Released test split, with gold.} Fitted nothing in the shipped system. It was
+read in six ways. The development-phase board scored it, so during that phase a local test
+QWK equalled the board reading, which is how the parity gate of Section~\ref{sec:system} was
+confirmed with one upload. It is reported beside validation for every member. The bootstrap
+noise estimate of Section~\ref{sec:setup} resamples its rows. It was the test leg of the dual
+gate in Section~\ref{sec:results}, whose one promoted candidate failed the validation leg. A
+screening script admitted public checkpoints to the candidate pool on it, which conditioned
+one shipped seat's presence in the pool (Appendix~\ref{app:fleet}). Finally, two refuted
+changes in Appendix~\ref{app:negative}, MARBERTv2 and document shrinkage, were estimated on
+it before being measured on the board, and the shrinkage strength $\alpha = 0.1$ was chosen
+from its curve.
+
+\paragraph{Blind set, no labels.} Supplied the score histogram that Equation~1 matches to
+the training prior, and the Domain and Text\_Class composition behind the refuted
+reweighted prior in Appendix~\ref{app:negative}. Every other use is a leaderboard reading,
+within the task's limit of five submissions per day: the calibration readings that fixed $f$
+(Section~\ref{sec:system}), the three paired comparisons of Table~\ref{tab:paired}, and the
+tie probes of Section~\ref{sec:results}, with the ledger of submissions in
+Appendix~\ref{app:ledger}. Among offline ties, the shipped system was chosen by those
+readings.
 
 \section{Reproducibility}
 \label{app:repro}

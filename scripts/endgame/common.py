@@ -107,8 +107,10 @@ def member_z(name, split):
 
 
 def members_with_test():
-    return [m for m in REG if test_path(m) is not None
-            and REG[m][0].exists() and REG[m][1].exists()]
+    # Validation and test arrays only. The blind array is not required, so the pool resolves
+    # from the published public-split arrays; the set is unchanged, because every registered
+    # member with a validation array also has a blind array in the campaign's score store.
+    return [m for m in REG if test_path(m) is not None and REG[m][0].exists()]
 
 
 def blend(members, weights, split):
