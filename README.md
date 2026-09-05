@@ -7,7 +7,7 @@ fourteen-member equal-weight ensemble of Arabic encoder fine-tunes, decoded from
 continuous score to the 19-level BAREC scale by 18 tuned cutpoints.
 
 One prediction file was submitted to both sentence-level tracks. It scored 85.3 QWK and
-placed 2nd on both.
+placed first on both in the official results.
 
 **Correction, 2026-09-03.** The entry first submitted during the testing phase had four of its
 fourteen seats fine-tuned on the training split concatenated with the corpus's released gold
@@ -135,13 +135,15 @@ untangle.
 
 ## Results
 
-Final blind-test standings. Submission counts and the first-place scores were pulled from the
-Codabench leaderboard API; our own row is the corrected entry (see the correction note above).
+Final blind-test standings, from the official results published on the
+[task website](https://barec.camel-lab.com/sharedtask2026) on 2026-09-05. Team counts
+exclude the organisers' baseline; our own row is the corrected entry (see the correction note
+above).
 
-| track | ranked submissions | our rank | QWK | Acc | Acc±1 | Dist | Acc7 | Acc5 | Acc3 |
+| track | teams listed | our rank | QWK | Acc | Acc±1 | Dist | Acc7 | Acc5 | Acc3 |
 |---|---|---|---|---|---|---|---|---|---|
-| Open | 4 | 2 | 85.27 | 37.75 | 70.82 | 1.136 | 60.51 | 66.93 | 74.59 |
-| Strict | 11 | 2 | 85.27 | 37.75 | 70.82 | 1.136 | 60.51 | 66.93 | 74.59 |
+| Open | 4 | 1 | 85.27 | 37.75 | 70.82 | 1.136 | 60.51 | 66.93 | 74.59 |
+| Strict | 8 | 1 | 85.27 | 37.75 | 70.82 | 1.136 | 60.51 | 66.93 | 74.59 |
 
 The seven metrics are the organisers' rescoring of the corrected file, sent to us on
 2026-09-04 after the phase had closed: QWK 0.852738, accuracy 0.377492, adjacent accuracy
@@ -149,8 +151,11 @@ The seven metrics are the organisers' rescoring of the corrected file, sent to u
 and 3 collapsed levels. They round to the 85.3 / 37.7 the board displayed for the same file
 during the testing phase (Open submission 872638, 2026-08-01).
 
-The first-place entry scored 85.5 on Open and 85.4 on Strict. Full leaderboard tables and the
-checks behind them are in `paper/VERIFIED_FACTS.md`.
+The runner-up scored 85.2 on Open and 85.0 on Strict. The Codabench leaderboards were not
+updated after the correction round: as of 2026-09-05 they still show the withdrawn entry at
+85.4, in second place behind an 85.5 on Open and an 85.4 on Strict, with 4 and 11 ranked
+submissions. The official tables, the Codabench tables and the checks behind them are in
+`paper/VERIFIED_FACTS.md`.
 
 ## What is not published
 

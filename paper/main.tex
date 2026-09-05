@@ -32,7 +32,7 @@ Team thylinao entered the Open and Strict tracks of the BAREC 2026 shared task o
 sentence-level Arabic readability with a deliberately plain system: a fourteen-member equal-weight ensemble of
 encoder fine-tunes, decoded to the 19-level scale by cutpoints interpolated halfway between
 validation-tuned thresholds and thresholds that match the blind score distribution to the
-training label prior. It scored 85.3 QWK on both tracks, second on both. This paper is about
+training label prior. It scored 85.3 QWK on both tracks, first on both. This paper is about
 how those choices were measured. Three independent estimates place the noise floor of our
 offline evaluation between 0.09 and 0.44 QWK, as large as the margins that decided the final
 ranking. In three paired comparisons against the live board, only the smallest of the three
@@ -49,13 +49,13 @@ Midway through the BAREC 2026 campaign, our ensemble scored 85.44, 85.28 and 85.
 same test split while we varied nothing but the resolution of a threshold search grid.
 Chasing that anomaly produced the central finding of this paper: measured three independent
 ways, the noise floor of our offline evaluation sits between 0.09 and 0.44 QWK, while the
-margins that decided our two placings were 0.1 and 0.2 QWK. An evaluation cannot choose between
+margins that decided our two placings were 0.1 and 0.3 QWK. An evaluation cannot choose between
 changes smaller than its own noise, and ours did not. In three paired tests, two of three
 offline estimates reversed in sign on the blind leaderboard. We
 responded by rebuilding the campaign around the one instrument with adequate resolution,
 first proving that the Open and Strict tracks score identical blind gold, then making every
 decision worth a submission from a live board reading. This paper describes the system that
-finished second on both tracks at 85.3 QWK, and the measurement discipline that chose it,
+finished first on both tracks at 85.3 QWK, and the measurement discipline that chose it,
 which we believe is the part worth reusing.\footnote{Code, the fine-tuning grid and the
 per-run score arrays: \url{https://github.com/thylinao1/barec-2026-readability}}
 
@@ -270,10 +270,11 @@ validation leg, and the board agreed.
 
 \subsection{Final standing}
 
-We finished second on both tracks with 85.3 QWK and 37.7 exact accuracy (85.27 and 37.75 in
-the organisers' rescoring, Appendix~\ref{app:ledger}). Open ranked 4 submissions and its
-winner scored 85.5; Strict ranked 11 and its winner 85.4. The winner's exact accuracy
-exceeded ours on both tracks, 39.5 against 37.7 in Open, which our pool could not reach by
+The official results, published after the correction of Section~\ref{sec:correction}, rank
+us first on both tracks with 85.3 QWK and 37.7 exact accuracy (85.27 and 37.75 in the
+organisers' rescoring, Appendix~\ref{app:ledger}). Open lists 4 teams and its runner-up
+scored 85.2; Strict lists 8 and its runner-up 85.0. The runner-up's exact accuracy exceeded
+ours on both tracks, 39.6 against 37.7 in Open, which our pool could not reach by
 recombination, calibration or retraining.
 
 \subsection{Correction to the submitted system}

@@ -5,6 +5,45 @@ could not be confirmed is listed under "Unconfirmable" with the fallback the pap
 
 ---
 
+## -2. OFFICIAL RESULTS: FIRST ON BOTH TRACKS (added 2026-09-05 evening, supersedes the ranks in sections -1 and B)
+
+The organisers' camera-ready email of 2026-09-05 (verbatim in
+`docs/correction/ORGANISER-CAMERA-READY-2026-09-05.md` in the private repo) says the official
+results are on the task website and asks teams to update any ranking in their papers. The
+website (`https://barec.camel-lab.com/sharedtask2026`, "Shared Task Results", fetched with
+curl 2026-09-05 21:46 SGT, raw page sha256 `24a51357...` kept as evidence in the private
+repo) lists, verbatim and in the page's order:
+
+**Strict:** Thylinao 85.3 / 37.7 / 70.8 / 1.1 / 60.5 / 66.9 / 74.6; ZHR 85.0 / 38.8 / 72.0 /
+1.1 / 60.4 / 68.7 / 75.8; Nile Nexus 84.8 / 37.9; Skywalker 84.2 / 41.7; Viper 84.1 / 40.9;
+HP 83.7 / 47.7; Baseline 82.5 / 42.4; NAMAA Community 82.4 / 37.1; Northwestern_2 79.0 /
+55.6. Eight teams plus the baseline; we are first by 0.3 QWK at the table's precision.
+
+**Open:** Thylinao 85.3 / 37.7 / 70.8 / 1.1 / 60.5 / 66.9 / 74.6; ZHR 85.2 / 39.6 / 72.1 /
+1.1 / 61.4 / 68.5 / 75.8; Baseline 82.5; LSI 81.7 / 50.6; Soloeval 80.6 / 49.1. Four teams
+plus the baseline; first by 0.1 QWK.
+
+**Constrained:** Baseline 82.5, LSI 81.7. Not entered.
+
+Checks: our line is the 2026-09-04 rescoring of the corrected file rounded to one decimal,
+on all seven metrics, on both tracks; the withdrawn file's line appears nowhere. The
+**Codabench boards were re-pulled the same evening and are unchanged** since 2026-08-04
+(section B): zaher-m 85.5 / thylinao 85.4 on Open, zaher-m 85.4 / thylinao 85.4 on Strict,
+11 ranked on Strict. Identical metric lines map the renamed teams (ZHR = zaher-m, whose
+lines changed; Nile Nexus = rishta_19; Skywalker = jhliang; Viper = bedeo; NAMAA Community =
+khloud_j; Northwestern_2 = monmon2000; LSI = salmadi; Soloeval = turabusmani; HP shares only
+its QWK with phonghoang). approx, ahmedabdou and serry are absent from the official Strict
+table. The page does not say why, and nothing public of ours speculates.
+
+Paper (rebuilt the same evening, body still ends on page 4, PDF sha256 `771df361...`):
+abstract, introduction and Final standing now say first on both; margins "0.1 and 0.3 QWK";
+"Open lists 4 teams and its runner-up scored 85.2; Strict lists 8 and its runner-up 85.0";
+runner-up's exact accuracy 39.6; Appendix A adds one sentence pointing at the official
+results. The same email allows 5 body pages for the camera-ready while the website's
+guidelines page still said 4 that evening; 4 satisfies both.
+
+---
+
 ## -1. TEST-SET CORRECTION (added 2026-09-03, supersedes sections C and B for our own rows)
 
 On 2026-09-02 Khalid Elmadani wrote that our system "appears to use the test set for training",

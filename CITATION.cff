@@ -6,7 +6,7 @@ abstract: >-
   Code and public-split artifacts for team thylinao at the BAREC 2026 Shared Task on
   sentence-level Arabic readability assessment. A fourteen-member equal-weight ensemble of
   Arabic encoder fine-tunes, decoded to the 19-level BAREC scale by 18 tuned cutpoints. 85.3
-  QWK, second place on both sentence-level tracks.
+  QWK, first place on both sentence-level tracks in the official results.
 authors:
   - family-names: Silchenko
     given-names: Maksim
