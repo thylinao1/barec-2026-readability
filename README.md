@@ -173,7 +173,8 @@ above lets the organisers verify the submitted file exactly.
 ## Citation
 
 The system description paper is in `paper/`: "thylinao at BAREC Shared Task 2026: Ensembling
-at the Noise Floor". Please also cite the shared task overview:
+at the Noise Floor", accepted to the BAREC 2026 Shared Task at ArabicNLP 2026 and to appear in
+its proceedings. Please also cite the shared task overview:
 
 ```bibtex
 @inproceedings{elmadani-etal-2026-barec-shared-task,

@@ -19,10 +19,18 @@ keywords:
   - "shared task"
   - "ensembling"
 references:
-  - type: unpublished
+  - type: conference-paper
     title: "thylinao at BAREC Shared Task 2026: Ensembling at the Noise Floor"
     authors:
       - family-names: Silchenko
         given-names: Maksim
     year: 2026
-    notes: "Under review for ArabicNLP 2026, co-located with EMNLP 2026."
+    status: in-press
+    collection-title: "Proceedings of the Fourth Arabic Natural Language Processing Conference"
+    conference:
+      name: "ArabicNLP 2026, co-located with EMNLP 2026"
+      city: Budapest
+      country: HU
+    publisher:
+      name: "Association for Computational Linguistics"
+    notes: "Accepted to the BAREC 2026 Shared Task at ArabicNLP 2026. To appear."
